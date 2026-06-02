@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scotland Baseball — NT Session Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Barlow+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+<style>
+/* ─────────────────────────────────────────────────────────────
+   SCOTLAND BASEBALL — NT Session Builder
+   Brand guide v1.1 — Light mode
+───────────────────────────────────────────────────────────── */
+:root{
+  /* Brand palette */
+  --navy:#1A2B6D; --royal:#2464B0; --mid-blue:#3A8CD4;
+  --sky:#8DC8EE;  --ice:#D6EDF9;   --stitch-red:#D94010;
+  --dark:#0D1530; --grey:#6B7280;
+
+  /* Semantic app tokens — light mode */
+  --bg:#F4F7FB;
+  --bg-card:#FFFFFF;
+  --bg-raised:#EEF2F8;
+  --bg-hover:#E4EAF4;
+  --border:#CDD8E8;
+  --border-dim:#E2EAF4;
+  --text:#0D1530;
+  --text-2:#4A5568;
+  --text-3:#9CA3AF;
+
+  /* Primary interactive = Royal Blue */
+  --pri:#2464B0;
+  --pri-bg:rgba(36,100,176,.10);
+  --pri-bdr:rgba(36,100,176,.30);
+
+  /* Group/functional accent colours — tuned for light mode */
+  --blue:#2464B0;  --blue-bg:rgba(36,100,176,.10);  --blue-bdr:rgba(36,100,176,.30);
+  --green:#166534; --green-bg:rgba(22,101,52,.10);  --green-bdr:rgba(22,101,52,.30);
+  --amber:#92400e; --amber-bg:rgba(146,64,14,.10);  --amber-bdr:rgba(146,64,14,.30);
+  --purple:#5b21b6;--purple-bg:rgba(91,33,182,.10); --purple-bdr:rgba(91,33,182,.30);
+  --red:#D94010;   --red-bg:rgba(217,64,16,.10);    --red-bdr:rgba(217,64,16,.30);
+  --teal:#0e7490;  --teal-bg:rgba(14,116,144,.10);  --teal-bdr:rgba(14,116,144,.30);
+  --orange:#92400e;--orange-bg:rgba(146,64,14,.10);
+  --pink:#9d174d;  --pink-bg:rgba(157,23,77,.10);   --pink-bdr:rgba(157,23,77,.30);
+
+  --r:4px; --r-lg:8px;
+  --shadow-sm:0 1px 4px rgba(26,43,109,.08);
+  --shadow:0 2px 10px rgba(26,43,109,.10);
+}
+
+/* ── RESET ─────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Source Serif 4',Georgia,serif;
+  background:var(--bg);color:var(--text);
+  overflow:hidden;font-size:14px;line-height:1.6
+}
+h1,h2,h3,h4{
+  font-family:'Oswald',sans-serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em
+}
+button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
+input,textarea,select{
+  font-family:'Source Serif 4',Georgia,serif;font-size:inherit;
+  background:var(--bg-card);border:1px solid var(--border);
+  color:var(--text);border-radius:var(--r);
+  padding:5px 9px;outline:none;transition:border-color .15s
+}
+input:focus,textarea:focus,select:focus{border-color:var(--royal)}
+textarea{resize:vertical}
+[contenteditable]{outline:none}
+a{color:var(--royal)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::placeholder{color:var(--text-3)}
+
+/* ── BUTTONS ───────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:5px;
+  height:30px;padding:0 12px;border-radius:var(--r);
+  font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  transition:all .15s;white-space:nowrap;cursor:pointer
+}
+.btn-primary{background:var(--navy);color:#fff !important;border:none}
+.btn-primary:hover{background:#243a8e}
+.btn-cta{background:var(--stitch-red);color:#fff !important;border:none}
+.btn-cta:hover{background:#b83408}
+.btn-ghost{border:1px solid var(--border);color:var(--text-2);background:var(--bg-card)}
+.btn-ghost:hover{border-color:var(--royal);color:var(--royal);background:var(--pri-bg)}
+.btn-icon{
+  width:26px;height:26px;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:var(--r);color:var(--text-3);font-size:13px;
+  transition:all .15s
+}
+.btn-icon:hover{background:var(--bg-hover);color:var(--text-2)}
+/* Header-context ghost buttons — white on navy */
+.app-header .btn-ghost{
+  border-color:rgba(255,255,255,.30);color:rgba(255,255,255,.80);background:transparent
+}
+.app-header .btn-ghost:hover{
+  border-color:rgba(255,255,255,.70);color:#fff;background:rgba(255,255,255,.12)
+}
+.app-header .btn-icon{color:rgba(255,255,255,.65)}
+.app-header .btn-icon:hover{background:rgba(255,255,255,.15);color:#fff}
+
+/* ── APP LAYOUT ────────────────────────────────────────────── */
+#app{display:flex;flex-direction:column;height:100vh}
+.app-header{
+  display:flex;align-items:center;gap:10px;padding:0 14px;
+  height:52px;flex-shrink:0;
+  background:var(--navy);
+  border-bottom:3px solid var(--stitch-red);z-index:20
+}
+.logo-badge{
+  background:var(--stitch-red);color:#fff;
+  font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 9px;border-radius:var(--r);flex-shrink:0
+}
+.session-title{
+  font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.05em;
+  color:#fff;padding:2px 5px;border-radius:var(--r);
+  border:1px solid transparent;min-width:40px;transition:border-color .15s
+}
+.session-title:hover{border-color:rgba(255,255,255,.35)}
+.session-title:focus{border-color:rgba(255,255,255,.70);background:rgba(255,255,255,.10)}
+.header-sep{width:1px;height:22px;background:rgba(255,255,255,.20);flex-shrink:0}
+.header-field{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--sky)
+}
+.header-field label{white-space:nowrap}
+.header-field input{
+  height:26px;font-size:12px;background:rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.25);color:#fff;border-radius:var(--r)
+}
+.header-field input:focus{border-color:var(--sky);background:rgba(255,255,255,.18)}
+.live-clock{
+  font-family:'Oswald',sans-serif;font-size:19px;font-weight:500;
+  color:var(--sky);letter-spacing:.08em;min-width:52px;text-align:center;flex-shrink:0
+}
+.header-actions{display:flex;gap:5px;margin-left:auto}
+.app-body{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ───────────────────────────────────────────────── */
+.sidebar{
+  width:272px;flex-shrink:0;
+  border-right:1px solid var(--border);
+  background:var(--bg);
+  display:flex;flex-direction:column;overflow:hidden
+}
+.sb-nav{
+  display:flex;flex-shrink:0;
+  background:var(--navy);
+  border-bottom:1px solid rgba(255,255,255,.1)
+}
+.sb-nav-btn{
+  flex:1;padding:9px 4px 8px;
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  text-align:center;cursor:pointer;
+  color:rgba(255,255,255,.50);border-bottom:2px solid transparent;
+  transition:all .15s;background:none
+}
+.sb-nav-btn:hover{color:rgba(255,255,255,.80)}
+.sb-nav-btn.active{color:#fff;border-bottom-color:var(--stitch-red)}
+.sb-panel{display:none;flex:1;overflow-y:auto;padding:10px;flex-direction:column;gap:8px}
+.sb-panel.active{display:flex}
+
+/* Sidebar cards */
+.card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--shadow-sm)
+}
+.card-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 11px 6px;border-bottom:1px solid var(--border-dim);
+  background:var(--bg-raised)
+}
+.card-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.15em;
+  color:var(--royal)
+}
+.card-bd{padding:10px 11px}
+
+/* Location */
+.loc-input-wrap{display:flex;flex-direction:column;gap:7px}
+.loc-input-wrap input{width:100%;font-size:12px;height:28px}
+.loc-maps-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  padding:5px 10px;border-radius:var(--r);cursor:pointer;
+  transition:all .15s;text-decoration:none;
+  background:var(--pri-bg);color:var(--royal);border:1px solid var(--pri-bdr);
+  width:100%;justify-content:center
+}
+.loc-maps-btn:hover{background:rgba(36,100,176,.18)}
+.loc-maps-btn:not([href]){opacity:.4;pointer-events:none}
+
+/* Pre-session / session notes */
+.presess-row{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.presess-row label{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--grey);white-space:nowrap
+}
+.presess-row input{height:28px;flex:1}
+#preSessionNotes,#warmupNotes,#sessionNotes{
+  width:100%;font-size:12.5px;min-height:52px;line-height:1.5
+}
+
+/* Groups sidebar */
+.groups-list{display:flex;flex-direction:column;gap:6px}
+.group-item{
+  background:var(--bg-raised);border:1px solid var(--border);
+  border-radius:var(--r);padding:7px 9px
+}
+.group-item-hd{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.group-dot-btn{
+  width:12px;height:12px;border-radius:50%;flex-shrink:0;
+  cursor:pointer;transition:transform .15s
+}
+.group-dot-btn:hover{transform:scale(1.3)}
+.group-name-inp{
+  flex:1;height:24px;padding:0 6px;
+  font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em;
+  background:transparent;border-color:transparent;color:var(--text)
+}
+.group-name-inp:focus{background:var(--bg-card);border-color:var(--royal)}
+.group-players-inp{
+  width:100%;font-size:11.5px;min-height:34px;padding:4px 7px;
+  background:var(--bg-card);border-color:var(--border-dim);color:var(--text-2);
+  line-height:1.5
+}
+.group-players-inp:focus{border-color:var(--border)}
+.group-merge-row{
+  display:flex;align-items:center;gap:5px;
+  margin-top:5px;padding-top:5px;border-top:1px solid var(--border-dim)
+}
+.group-merge-row label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text-3);white-space:nowrap
+}
+.group-merge-sel{flex:1;height:24px;font-size:11px;padding:0 5px}
+.absent-wrap{margin-top:6px;padding-top:6px;border-top:1px solid var(--border-dim)}
+.absent-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--stitch-red);margin-bottom:4px
+}
+#absentPlayers{
+  width:100%;font-size:11.5px;min-height:34px;padding:4px 7px;
+  background:var(--bg-card);border-color:var(--border-dim);color:var(--text-2)
+}
+#absentPlayers:focus{border-color:var(--border)}
+
+/* Position splits sidebar */
+.toggle-switch{position:relative;width:34px;height:18px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{
+  position:absolute;inset:0;
+  background:var(--bg-raised);border-radius:18px;
+  cursor:pointer;transition:background .2s;border:1px solid var(--border)
+}
+.toggle-track::before{
+  content:'';position:absolute;width:12px;height:12px;
+  left:2px;top:2px;background:var(--text-3);border-radius:50%;transition:all .2s
+}
+.toggle-switch input:checked+.toggle-track{background:var(--royal);border-color:var(--royal)}
+.toggle-switch input:checked+.toggle-track::before{transform:translateX(16px);background:#fff}
+.pos-disabled-hint{
+  font-family:'Source Serif 4',serif;font-style:italic;
+  font-size:12px;color:var(--text-3);padding:4px 0
+}
+.pos-items-list{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.pos-item{
+  background:var(--bg-raised);border:1px solid var(--border);
+  border-radius:var(--r);padding:6px 8px;display:flex;align-items:center;gap:6px
+}
+.pos-item-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;cursor:pointer;transition:transform .15s}
+.pos-item-dot:hover{transform:scale(1.3)}
+.pos-item-name{
+  flex:1;font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em;
+  height:22px;background:transparent;border-color:transparent;
+  padding:0 4px;color:var(--text)
+}
+.pos-item-name:focus{background:var(--bg-card);border-color:var(--royal)}
+.pos-item-count{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  color:var(--text-3);background:var(--bg-hover);
+  padding:1px 6px;border-radius:6px;white-space:nowrap;letter-spacing:.05em
+}
+
+/* Warmup / session length rows */
+.warmup-dur-row{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.warmup-dur-row label{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--grey)
+}
+.warmup-dur-row span{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--text-3)}
+
+/* Firebase */
+.firebase-card-bd{padding:10px 11px;display:flex;flex-direction:column;gap:7px}
+#firebaseUrl{width:100%;font-size:11.5px;height:28px}
+.fb-status{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;
+  display:flex;align-items:center;gap:5px;padding:2px 8px;border-radius:8px;white-space:nowrap
+}
+.fb-status.connected{background:var(--green-bg);color:var(--green)}
+.fb-status.idle{background:var(--bg-raised);color:var(--text-3)}
+.fb-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.fb-setup-hint{
+  font-size:11px;color:var(--text-2);line-height:1.6;
+  background:var(--bg-raised);border-radius:var(--r);padding:6px 8px;
+  border-left:3px solid var(--navy)
+}
+.fb-setup-hint a{color:var(--royal)}
+#sessionEndTime{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  letter-spacing:.08em;color:var(--grey);margin-top:2px
+}
+
+/* ── FULL SQUAD SPECIAL TAB ────────────────────────────────── */
+.tab-btn-fs{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 16px;border-radius:var(--r) var(--r) 0 0;
+  font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:rgba(255,255,255,.65);background:rgba(26,43,109,.70);
+  border:1px solid rgba(255,255,255,.12);border-bottom:none;
+  cursor:pointer;transition:all .15s;
+  white-space:nowrap;flex-shrink:0;position:relative;bottom:-1px;z-index:0
+}
+.tab-btn-fs:hover{color:#fff;background:rgba(26,43,109,.85)}
+.tab-btn-fs.active{
+  color:var(--navy);background:var(--bg-card);
+  border-color:var(--border);border-bottom-color:var(--bg-card);z-index:1
+}
+.tab-fs-icon{font-size:10px;opacity:.8}
+.tab-rot-sep{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:'Barlow Condensed',sans-serif;font-size:9px;
+  color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.12em;
+  padding:0 8px;align-self:center;flex-shrink:0;position:relative;bottom:-1px
+}
+
+/* Split time footer */
+.tc-split-footer{
+  flex-shrink:0;display:flex;align-items:center;gap:10px;
+  padding:10px 16px;border-top:1px solid var(--border);
+  background:var(--bg);font-size:12px
+}
+.tc-split-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--grey);white-space:nowrap
+}
+.tc-split-time{
+  font-family:'Oswald',sans-serif;font-size:20px;font-weight:600;
+  color:var(--navy);letter-spacing:.04em
+}
+.tc-split-auto{
+  font-family:'Barlow Condensed',sans-serif;font-size:9px;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-3);background:var(--bg-raised);padding:2px 7px;border-radius:10px
+}
+.tc-split-inp{
+  width:90px;height:28px;font-size:13px;text-align:center;
+  font-family:'Oswald',sans-serif;font-weight:600;color:var(--navy)
+}
+.tc-split-reset{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-3);cursor:pointer;border:none;background:none;padding:0
+}
+.tc-split-reset:hover{color:var(--royal)}
+
+/* Rotation-from context banner */
+.tc-rot-from{
+  flex-shrink:0;display:flex;align-items:center;gap:8px;
+  padding:6px 16px;
+  background:rgba(36,100,176,.06);border-bottom:1px solid rgba(36,100,176,.16);
+  font-size:11.5px
+}
+.tc-rot-from-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--grey)
+}
+.tc-rot-from-time{
+  font-family:'Oswald',sans-serif;font-weight:600;
+  color:var(--navy);font-size:13px
+}
+
+/* ── MAIN AREA & TAB BAR ───────────────────────────────────── */
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.tab-bar{
+  display:flex;align-items:flex-end;gap:2px;
+  padding:8px 14px 0;flex-shrink:0;
+  background:var(--navy);
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;scrollbar-width:none
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 14px;border-radius:var(--r) var(--r) 0 0;
+  font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:rgba(255,255,255,.50);background:rgba(255,255,255,.06);
+  border:1px solid transparent;border-bottom:none;
+  cursor:pointer;transition:all .15s;
+  white-space:nowrap;flex-shrink:0;position:relative;bottom:-1px;z-index:0
+}
+.tab-btn:hover{color:rgba(255,255,255,.80);background:rgba(255,255,255,.12)}
+.tab-btn.active{
+  color:var(--gc,var(--royal));background:var(--bg-card);
+  border-color:var(--border);border-bottom-color:var(--bg-card);z-index:1
+}
+.tab-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:var(--gc,var(--royal))}
+.tab-count{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  letter-spacing:.05em;font-weight:700;
+  color:rgba(255,255,255,.40);background:rgba(255,255,255,.08);
+  padding:1px 5px;border-radius:6px
+}
+.tab-btn.active .tab-count{
+  background:var(--gc-bg,var(--pri-bg));color:var(--gc,var(--royal))
+}
+.tab-sep{
+  font-family:'Barlow Condensed',sans-serif;font-size:9px;
+  color:rgba(255,255,255,.30);text-transform:uppercase;letter-spacing:.14em;
+  padding:0 8px;align-self:center;flex-shrink:0;position:relative;bottom:-1px
+}
+.tab-add-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:7px 12px;border-radius:var(--r) var(--r) 0 0;
+  font-family:'Oswald',sans-serif;font-size:11.5px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:rgba(255,255,255,.40);background:none;border:none;
+  cursor:pointer;transition:all .15s;
+  white-space:nowrap;flex-shrink:0;position:relative;bottom:-1px
+}
+.tab-add-btn:hover{color:#fff}
+
+/* ── TAB CONTENT ───────────────────────────────────────────── */
+.tab-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-card)}
+.tc-hd{
+  flex-shrink:0;padding:10px 16px;
+  border-bottom:1px solid var(--border);background:var(--bg-card);
+  display:flex;flex-direction:column;gap:0
+}
+.tc-hd-row{display:flex;align-items:center;gap:8px;min-height:32px}
+.tc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;background:var(--gc,var(--royal))}
+.tc-name{
+  font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--text);flex:1
+}
+.tc-players{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  letter-spacing:.05em;color:var(--text-3);
+  max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.tc-pos-badge{
+  font-family:'Barlow Condensed',sans-serif;font-size:9.5px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  background:var(--ice);color:var(--royal);
+  padding:2px 8px;border-radius:10px
+}
+.tc-timeline{padding:8px 0 2px}
+.tc-tl-row{
+  display:flex;justify-content:space-between;
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:4px
+}
+.tc-tl-row .over{color:var(--stitch-red);font-weight:700}
+.tc-tl-track{height:4px;background:var(--bg-raised);border-radius:3px;overflow:hidden}
+.tc-tl-fill{height:100%;border-radius:3px;transition:width .4s ease;background:var(--gc,var(--royal))}
+.tc-tl-fill.tc-timeline-over{background:var(--stitch-red) !important}
+.tc-body{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
+.tc-footer{padding:0 10px 10px;flex-shrink:0}
+.tc-add-btn{
+  width:100%;padding:9px 0;display:flex;align-items:center;justify-content:center;gap:6px;
+  border:2px dashed var(--border);border-radius:var(--r);
+  font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text-3);cursor:pointer;transition:all .2s;background:none
+}
+.tc-add-btn:hover{
+  border-color:var(--gc,var(--royal));
+  color:var(--gc,var(--royal));
+  background:var(--gc-bg,var(--pri-bg))
+}
+.tc-empty{
+  text-align:center;padding:32px 20px;
+  background:var(--bg-raised);border-radius:var(--r-lg);border:1px dashed var(--border)
+}
+.tc-empty-title{
+  font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text-3);margin-bottom:8px
+}
+.tc-empty-sub{font-size:13px;color:var(--text-3);line-height:1.6;font-style:italic}
+
+/* ── DRILL CARDS ───────────────────────────────────────────── */
+.drill-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);border-radius:var(--r-lg);
+  border-left:3px solid var(--gc,var(--royal));
+  box-shadow:var(--shadow-sm);overflow:hidden;transition:box-shadow .15s
+}
+.drill-card:hover{box-shadow:var(--shadow)}
+.dc-hd{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:9px 12px 8px;background:var(--bg-card)
+}
+.dc-time{
+  font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;
+  color:var(--royal);min-width:46px;cursor:pointer;
+  transition:color .12s;flex-shrink:0;padding-top:1px;
+  letter-spacing:.03em
+}
+.dc-time:hover{color:var(--navy)}
+.dc-time.manual{color:var(--amber)}
+.dc-time-reset{
+  display:block;font-family:'Barlow Condensed',sans-serif;
+  font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-3);margin-top:2px;cursor:pointer
+}
+.dc-time-reset:hover{color:var(--royal)}
+.dc-info{flex:1;min-width:0}
+.dc-name-row{display:flex;align-items:baseline;gap:7px;margin-bottom:4px;flex-wrap:wrap}
+.dc-name{
+  font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em;color:var(--navy);line-height:1.2
+}
+.dc-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dc-dur-field{display:flex;align-items:center;gap:4px}
+.dc-dur-field label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3)
+}
+.dc-dur{
+  width:44px;height:24px;padding:0 5px;
+  font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;
+  text-align:center;color:var(--navy);background:var(--bg-raised);
+  border-color:var(--border-dim)
+}
+
+/* Category badges */
+.cat-badge{
+  font-family:'Barlow Condensed',sans-serif;font-size:9.5px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  padding:2px 7px;border-radius:3px;display:inline-block;white-space:nowrap
+}
+.cat-Hitting{background:rgba(146,64,14,.12);color:#92400e}
+.cat-Infield{background:rgba(22,101,52,.12);color:#166534}
+.cat-Outfield{background:rgba(36,100,176,.12);color:#2464B0}
+.cat-Pitching{background:rgba(217,64,16,.12);color:#D94010}
+.cat-Catching{background:rgba(91,33,182,.12);color:#5b21b6}
+.cat-Custom{background:rgba(14,116,144,.12);color:#0e7490}
+
+/* Video pill */
+.video-pill{
+  display:inline-flex;align-items:center;gap:3px;
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:2px 8px;border-radius:10px;cursor:pointer;transition:all .15s;
+  background:var(--pri-bg);color:var(--royal);border:1px solid var(--pri-bdr)
+}
+.video-pill:hover{background:rgba(36,100,176,.18)}
+.dc-actions{display:flex;gap:2px;flex-shrink:0}
+
+/* Card body — focus, notes, extra videos */
+.dc-body{
+  padding:9px 12px 10px;
+  border-top:1px solid var(--border-dim);background:var(--bg-raised)
+}
+.dc-field-lbl{
+  font-family:'Barlow Condensed',sans-serif;font-size:9.5px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  display:block;margin-bottom:4px
+}
+.dc-field-lbl.focus-lbl{color:var(--royal);opacity:.9}
+.dc-field-lbl.notes-lbl{color:var(--text-3);margin-top:8px}
+.dc-focus{
+  width:100%;font-size:13px;padding:7px 10px;min-height:40px;line-height:1.5;
+  background:var(--ice);border:1px solid var(--sky);
+  color:var(--text);border-radius:var(--r)
+}
+.dc-focus:focus{border-color:var(--royal)}
+.dc-notes{
+  width:100%;font-size:12.5px;padding:5px 9px;min-height:30px;
+  background:var(--bg-card);border:1px solid var(--border-dim);
+  color:var(--text-2);border-radius:var(--r);font-style:italic
+}
+.dc-notes:focus{border-color:var(--border)}
+.dc-evids{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.dc-evid-row{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg-card);border:1px solid var(--border-dim);
+  border-radius:var(--r);padding:4px 8px
+}
+.vtype-badge{
+  font-family:'Barlow Condensed',sans-serif;font-size:9px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0
+}
+.vtype-youtube{background:rgba(255,60,60,.12);color:#c0392b}
+.vtype-instagram{background:rgba(180,40,170,.12);color:#8e1a8a}
+.vtype-gdrive{background:var(--blue-bg);color:var(--blue)}
+.vtype-unknown{background:var(--bg-raised);color:var(--text-3)}
+.dc-evid-url{
+  flex:1;font-size:10.5px;color:var(--text-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none
+}
+.dc-evid-url:hover{color:var(--royal)}
+.dc-evid-add{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--text-3);cursor:pointer;background:none;border:none;
+  padding:2px 0;text-align:left;margin-top:2px
+}
+.dc-evid-add:hover{color:var(--royal)}
+
+/* ── COLOUR SYSTEM FOR GROUPS ──────────────────────────────── */
+.gc-blue{--gc:var(--blue);--gc-bg:var(--blue-bg);--gc-bdr:var(--blue-bdr)}
+.gc-green{--gc:var(--green);--gc-bg:var(--green-bg);--gc-bdr:var(--green-bdr)}
+.gc-amber{--gc:var(--amber);--gc-bg:var(--amber-bg);--gc-bdr:var(--amber-bdr)}
+.gc-purple{--gc:var(--purple);--gc-bg:var(--purple-bg);--gc-bdr:var(--purple-bdr)}
+.gc-red{--gc:var(--red);--gc-bg:var(--red-bg);--gc-bdr:var(--red-bdr)}
+.gc-teal{--gc:var(--teal);--gc-bg:var(--teal-bg);--gc-bdr:var(--teal-bdr)}
+.gc-pri{--gc:var(--pri);--gc-bg:var(--pri-bg);--gc-bdr:var(--pri-bdr)}
+.gc-pink{--gc:var(--pink);--gc-bg:var(--pink-bg);--gc-bdr:var(--pink-bdr)}
+
+/* ── MODALS ────────────────────────────────────────────────── */
+.backdrop{
+  position:fixed;inset:0;background:rgba(13,21,48,.60);
+  z-index:100;display:none;align-items:flex-start;justify-content:flex-end
+}
+.backdrop.open{display:flex}
+.backdrop.centered{justify-content:center;align-items:center}
+.panel{
+  background:var(--bg-card);border-left:1px solid var(--border);
+  height:100vh;width:360px;display:flex;flex-direction:column;
+  animation:slideIn .2s ease;box-shadow:-4px 0 20px rgba(26,43,109,.12)
+}
+.panel-center{
+  border:1px solid var(--border);border-radius:var(--r-lg);
+  height:auto;max-height:88vh;width:min(600px,94vw);
+  animation:fadeUp .2s ease;box-shadow:var(--shadow)
+}
+@keyframes slideIn{from{transform:translateX(16px);opacity:0}to{transform:none;opacity:1}}
+@keyframes fadeUp{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.panel-hd{
+  display:flex;align-items:center;gap:9px;flex-shrink:0;
+  padding:12px 14px 10px;border-bottom:1px solid var(--border);
+  background:var(--navy)
+}
+.panel-hd h2{
+  font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;color:#fff;flex:1
+}
+.panel-hd .btn-icon{color:rgba(255,255,255,.65)}
+.panel-hd .btn-icon:hover{background:rgba(255,255,255,.15);color:#fff}
+.panel-body{flex:1;overflow-y:auto}
+.panel-ft{
+  padding:10px 14px;border-top:1px solid var(--border);
+  flex-shrink:0;display:flex;gap:7px;justify-content:flex-end;
+  background:var(--bg-raised)
+}
+
+/* Picker */
+.picker-targets{
+  display:flex;gap:4px;padding:8px 10px;
+  background:var(--bg-raised);border-bottom:1px solid var(--border);
+  flex-shrink:0;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none
+}
+.picker-targets::-webkit-scrollbar{display:none}
+.pt-btn{
+  padding:5px 9px;border-radius:var(--r);flex-shrink:0;
+  font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  cursor:pointer;border:1px solid var(--border);
+  color:var(--text-2);background:var(--bg-card);transition:all .15s;
+  display:flex;align-items:center;gap:5px
+}
+.pt-btn.active{background:var(--pri-bg);color:var(--royal);border-color:var(--pri-bdr)}
+.pt-btn-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.pt-sep{
+  font-family:'Barlow Condensed',sans-serif;font-size:9px;
+  color:var(--text-3);text-transform:uppercase;letter-spacing:.12em;
+  align-self:center;padding:0 3px;flex-shrink:0
+}
+.search-wrap{
+  padding:8px 11px;border-bottom:1px solid var(--border);
+  flex-shrink:0;position:relative
+}
+.search-icon{
+  position:absolute;left:20px;top:50%;transform:translateY(-50%);
+  color:var(--text-3);pointer-events:none;font-size:13px
+}
+.search-inp{width:100%;height:32px;padding:0 10px 0 30px}
+
+/* Drill picker categories */
+.picker-cat{border-bottom:1px solid var(--border-dim)}
+.picker-cat:last-child{border-bottom:none}
+.cat-hd{
+  display:flex;align-items:center;gap:7px;padding:9px 12px;
+  cursor:pointer;user-select:none;transition:background .12s
+}
+.cat-hd:hover{background:var(--bg-raised)}
+.cat-arrow{color:var(--text-3);font-size:9px;transition:transform .18s}
+.cat-hd.open .cat-arrow{transform:rotate(90deg)}
+.cat-hd-name{
+  font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em;flex:1;color:var(--text)
+}
+.cat-count{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  color:var(--text-3);background:var(--bg-raised);
+  padding:1px 6px;border-radius:8px
+}
+.cat-drills-list{display:none}
+.cat-drills-list.open{display:block}
+.picker-drill{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 12px 7px 22px;border-top:1px solid var(--border-dim);
+  transition:background .1s
+}
+.picker-drill:hover{background:var(--bg-raised)}
+.picker-drill-name{flex:1;font-size:13px;color:var(--text)}
+.picker-drill-acts{display:flex;gap:4px;flex-shrink:0}
+.btn-vid-sm{
+  display:inline-flex;align-items:center;gap:3px;
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:3px 7px;border-radius:3px;cursor:pointer;transition:all .15s;
+  background:var(--pri-bg);color:var(--royal);border:1px solid var(--pri-bdr)
+}
+.btn-vid-sm:hover{background:rgba(36,100,176,.18)}
+.btn-add-sm{
+  display:inline-flex;align-items:center;
+  font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  padding:4px 10px;border-radius:3px;cursor:pointer;transition:all .15s;
+  background:var(--bg-raised);color:var(--text-2);border:1px solid var(--border)
+}
+.btn-add-sm:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.video-wrap iframe{width:100%;aspect-ratio:16/9;border:none;display:block}
+
+/* Drill editor form */
+.form-grp{margin-bottom:13px}
+.form-lbl{
+  display:block;font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--grey);margin-bottom:5px
+}
+.form-inp{width:100%}
+.form-sel{
+  width:100%;height:34px;background:var(--bg-card);
+  border:1px solid var(--border);color:var(--text);
+  border-radius:var(--r);padding:0 8px;
+  font-family:'Source Serif 4',serif
+}
+.form-sel:focus{border-color:var(--royal)}
+.video-preview-row{
+  margin-top:7px;padding:8px 10px;background:var(--bg-raised);
+  border-radius:var(--r);font-size:12px;display:flex;align-items:center;gap:8px;
+  border:1px solid var(--border-dim)
+}
+
+/* Drill manager table */
+.mgr-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.mgr-table th{
+  text-align:left;padding:7px 10px;
+  font-family:'Barlow Condensed',sans-serif;font-size:9.5px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--grey);border-bottom:1px solid var(--border);
+  background:var(--bg-raised);position:sticky;top:0;z-index:1
+}
+.mgr-table td{
+  padding:7px 10px;border-bottom:1px solid var(--border-dim);
+  vertical-align:middle;color:var(--text)
+}
+.mgr-table tr:last-child td{border-bottom:none}
+.mgr-table tr:hover td{background:var(--bg-raised)}
+.builtin-pill{
+  font-family:'Barlow Condensed',sans-serif;font-size:9px;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-3);background:var(--bg-raised);padding:1px 5px;border-radius:3px;margin-left:5px
+}
+
+/* Sessions list */
+.sess-item{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-bottom:1px solid var(--border-dim);cursor:pointer;transition:background .12s
+}
+.sess-item:hover{background:var(--bg-raised)}
+.sess-item-date{
+  font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;
+  text-transform:uppercase;color:var(--royal);white-space:nowrap;width:90px;flex-shrink:0
+}
+.sess-item-title{font-size:13px;flex:1;color:var(--text)}
+.sess-empty{
+  padding:24px 14px;font-style:italic;
+  font-size:13px;color:var(--text-3);text-align:center
+}
+
+/* Toast */
+.toast-rack{
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+  z-index:999;display:flex;flex-direction:column;gap:7px;
+  pointer-events:none;align-items:center
+}
+.toast{
+  padding:9px 16px;background:var(--navy);border:none;
+  border-radius:var(--r);font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:#fff;animation:toastIn .18s ease,toastOut .3s 2.2s forwards;
+  white-space:nowrap;box-shadow:var(--shadow)
+}
+.toast.ok{background:var(--green);color:#fff}
+.toast.err{background:var(--stitch-red);color:#fff}
+@keyframes toastIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0}}
+
+/* Share */
+.share-url-box{
+  background:var(--bg-raised);border:1px solid var(--border);
+  border-radius:var(--r);padding:9px 11px;font-family:monospace;font-size:11px;
+  color:var(--text-2);word-break:break-all;line-height:1.6;user-select:all;
+  max-height:80px;overflow-y:auto
+}
+.share-note{font-size:13px;color:var(--text-3);line-height:1.6;font-style:italic}
+.update-banner{
+  display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);
+  background:var(--navy);border:none;color:#fff;
+  padding:8px 16px;border-radius:var(--r);
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  z-index:50;white-space:nowrap;box-shadow:var(--shadow)
+}
+.update-banner.show{display:block}
+
+/* Rotation Builder */
+.rb-stations-list{padding:12px 14px;display:flex;flex-direction:column;gap:7px}
+.rb-station-row{display:flex;align-items:center;gap:7px}
+.rb-station-num{
+  font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;
+  color:var(--text-3);width:20px;text-align:right;flex-shrink:0
+}
+.rb-station-sel{flex:1;height:30px;font-size:12px}
+.rb-settings-row{
+  display:flex;align-items:center;gap:14px;padding:10px 14px;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--bg-raised);flex-shrink:0;flex-wrap:wrap
+}
+.rb-setting{display:flex;align-items:center;gap:7px}
+.rb-setting label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--grey)
+}
+.rb-setting input{width:60px;height:28px;text-align:center}
+.rb-preview-wrap{padding:12px 14px;overflow-x:auto}
+.rb-table{border-collapse:collapse;width:100%;font-size:12px}
+.rb-table th{
+  text-align:left;padding:5px 8px;
+  font-family:'Barlow Condensed',sans-serif;font-size:9px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--grey);border-bottom:1px solid var(--border);background:var(--bg-raised)
+}
+.rb-table td{padding:5px 8px;border-bottom:1px solid var(--border-dim);color:var(--text)}
+.rb-table tr:last-child td{border-bottom:none}
+.rb-time{
+  font-family:'Oswald',sans-serif;font-weight:600;color:var(--navy);white-space:nowrap
+}
+.rb-cell{font-size:11.5px;color:var(--text-2)}
+.rb-empty{
+  padding:16px;text-align:center;font-size:13px;font-style:italic;color:var(--text-3)
+}
+.rb-add-btn{
+  width:100%;padding:7px 0;border:1.5px dashed var(--border);
+  border-radius:var(--r);color:var(--text-3);
+  font-family:'Oswald',sans-serif;font-size:11.5px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+  cursor:pointer;transition:all .2s;background:none;margin-top:4px
+}
+.rb-add-btn:hover{border-color:var(--royal);color:var(--royal);background:var(--pri-bg)}
+
+/* ── READ-ONLY VIEW ────────────────────────────────────────── */
+#readOnlyView{display:none;overflow-y:auto;background:var(--bg);min-height:100vh}
+.ro-wrap{max-width:940px;margin:0 auto;padding:24px 16px 48px}
+.ro-header{
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:26px;padding-bottom:18px;
+  border-bottom:3px solid var(--stitch-red)
+}
+.ro-logo{
+  background:var(--navy);color:#fff;
+  font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;
+  text-transform:uppercase;letter-spacing:.12em;
+  padding:5px 11px;border-radius:var(--r);flex-shrink:0;
+  border-bottom:2px solid var(--stitch-red)
+}
+.ro-title{
+  font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.04em;color:var(--navy);line-height:1.2
+}
+.ro-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:5px}
+.ro-meta-item{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--grey);display:flex;align-items:center;gap:5px
+}
+.ro-meta-item span{color:var(--navy);font-weight:700}
+.ro-location{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ro-loc-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--grey)
+}
+.ro-loc-name{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;color:var(--navy)}
+.ro-loc-link{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:3px 10px;border-radius:10px;text-decoration:none;
+  transition:background .15s;background:var(--pri-bg);color:var(--royal);border:1px solid var(--pri-bdr)
+}
+.ro-loc-link:hover{background:rgba(36,100,176,.18)}
+.ro-section{margin-bottom:28px}
+.ro-section-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.18em;
+  color:var(--royal);margin-bottom:10px;padding-bottom:6px;
+  border-bottom:2px solid var(--ice)
+}
+.ro-block{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:12px 14px
+}
+.ro-block-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--grey);margin-bottom:5px
+}
+.ro-block-text{font-size:14px;color:var(--text-2);line-height:1.6;font-style:italic}
+.ro-warmup-dur{
+  font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;
+  text-transform:uppercase;margin-bottom:5px;color:var(--navy)
+}
+.ro-absent{
+  background:rgba(217,64,16,.08);border:1px solid rgba(217,64,16,.25);
+  border-radius:var(--r);padding:8px 12px;font-size:13px;color:var(--text-2)
+}
+.ro-absent-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--stitch-red);margin-bottom:3px
+}
+.ro-groups{display:flex;gap:16px;overflow-x:auto;padding-bottom:6px}
+.ro-group{min-width:228px;flex:1}
+.ro-group-hd{
+  display:flex;align-items:center;gap:7px;margin-bottom:10px;
+  padding-bottom:8px;border-bottom:2px solid var(--gc,var(--royal))
+}
+.ro-group-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;background:var(--gc,var(--royal))}
+.ro-group-name{
+  font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;flex:1;color:var(--gc,var(--royal))
+}
+.ro-group-players{
+  background:var(--bg-raised);border:1px solid var(--border);
+  border-radius:var(--r);padding:7px 9px;margin-bottom:7px;
+  font-size:12.5px;color:var(--text-2);line-height:1.6
+}
+.ro-group-players-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:9.5px;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--grey);font-weight:700;margin-bottom:3px
+}
+.ro-drill{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-left:3px solid var(--gc,var(--royal));
+  border-radius:var(--r);padding:9px 11px;margin-bottom:6px;
+  box-shadow:var(--shadow-sm)
+}
+.ro-drill-top{display:flex;align-items:flex-start;gap:7px;margin-bottom:6px}
+.ro-drill-time{
+  font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;
+  color:var(--navy);min-width:46px;flex-shrink:0;letter-spacing:.03em
+}
+.ro-drill-name{
+  font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.04em;flex:1;line-height:1.2;color:var(--navy)
+}
+.ro-drill-dur{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);white-space:nowrap;flex-shrink:0
+}
+.ro-drill-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px}
+.ro-drill-focus{
+  font-size:13px;color:var(--text);line-height:1.6;
+  margin-top:6px;padding:8px 11px;
+  background:var(--ice);border-radius:var(--r);
+  border:1px solid var(--sky);font-style:italic
+}
+.ro-video-link{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:3px 10px;border-radius:10px;text-decoration:none;
+  background:var(--pri-bg);color:var(--royal);border:1px solid var(--pri-bdr);
+  cursor:pointer;transition:background .15s
+}
+.ro-video-link:hover{background:rgba(36,100,176,.18)}
+.ro-ref-link{background:var(--bg-raised);color:var(--text-2);border-color:var(--border)}
+.ro-notes-box{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:12px 14px;
+  font-size:14px;color:var(--text-2);line-height:1.6;font-style:italic
+}
+.ro-empty{font-style:italic;font-size:13px;color:var(--text-3);padding:8px 0}
+#roVideoModal{
+  display:none;position:fixed;inset:0;background:rgba(13,21,48,.75);
+  z-index:99999;align-items:center;justify-content:center
+}
+#roVideoModal.open{display:flex}
+.ro-video-panel{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-lg);width:min(640px,94vw);overflow:hidden;
+  animation:fadeUp .18s ease;box-shadow:var(--shadow)
+}
+.ro-video-panel-hd{
+  display:flex;align-items:center;gap:9px;padding:11px 14px 10px;
+  border-bottom:1px solid var(--border);background:var(--navy)
+}
+.ro-video-panel-hd h3{
+  font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;color:#fff;flex:1
+}
+.ro-video-panel-hd .btn-icon{color:rgba(255,255,255,.65)}
+.ro-video-panel-hd .btn-icon:hover{background:rgba(255,255,255,.15);color:#fff}
+.ro-video-content iframe{width:100%;aspect-ratio:16/9;border:none;display:block}
+.ro-video-ig{padding:24px;text-align:center}
+.ro-video-ig p{font-style:italic;color:var(--text-2);font-size:13px;margin-bottom:14px}
+
+/* ── PRINT ─────────────────────────────────────────────────── */
+@media print{
+.no-print{display:none !important}
+body{background:white;color:#111;overflow:auto;font-size:12px}
+#app{height:auto}
+.app-header,.sidebar{display:none !important}
+.app-body{display:flex}
+.main-area{display:flex;flex-direction:column}
+.tab-bar{display:none}
+.tab-content{overflow:visible;display:flex;flex-direction:column}
+.tc-hd{border-left:none;padding:8px 0;background:none}
+.tc-name{font-size:14px}
+.tc-timeline,.tc-footer{display:none}
+.tc-body{overflow:visible;padding:0;gap:6px}
+.tc-empty{display:none}
+.drill-card{border:1px solid #ccc;border-left:3px solid #1A2B6D;page-break-inside:avoid;background:white;border-radius:3px}
+.dc-hd{background:white}
+.dc-time{color:#1A2B6D;font-size:15px}
+.dc-time.manual{color:#92400e}
+.dc-time-reset,.dc-actions,.dc-notes,.dc-field-lbl.notes-lbl,.dc-evids{display:none}
+.dc-dur{background:white;border:1px solid #ccc;color:#333}
+.dc-focus{background:#D6EDF9;border:1px solid #8DC8EE;color:#0D1530}
+.backdrop{display:none !important}
+.print-vid{display:flex !important;align-items:center;gap:5px;margin-top:5px;padding-top:5px;border-top:1px solid #eee;font-size:10px;color:#444}
+.print-vid a{color:#2464B0;word-break:break-all}
+}
+</style>
+</head>
+<body>
+<div id="app">
+<header class="app-header no-print">
+  <span class="logo-badge">NT</span>
+  <span class="session-title" id="sessionTitle" contenteditable spellcheck="false">National Team Training Session</span>
+  <div class="header-sep"></div>
+  <div class="header-field"><label>Date</label><input type="date" id="sessionDate"></div>
+  <div class="header-field"><label>Start</label><input type="time" id="sessionStart" value="10:00"></div>
+  <div class="live-clock" id="liveClock"></div>
+  <div class="header-actions">
+    <button class="btn btn-ghost no-print" onclick="openModal('mgrBackdrop')">&#128203; Library</button>
+    <button class="btn btn-ghost no-print" onclick="openRotationBuilder()">&#10227; Rotation</button>
+    <button class="btn btn-ghost no-print" onclick="openSessionsModal()">&#128193; Sessions</button>
+    <button class="btn btn-ghost no-print" onclick="saveSession()">&#8595; Save</button>
+    <button class="btn btn-ghost no-print" onclick="openShareModal()">&#128279; Share</button>
+    <button class="btn btn-cta no-print" onclick="publishSession()">&#9654; Publish</button>
+    <button class="btn btn-ghost no-print" onclick="doPrint()">&#128424; Print</button>
+  </div>
+</header>
+<div class="update-banner no-print" id="updateBanner">&#10227; Updated by another coach &mdash; refresh to see changes</div>
+<div class="app-body">
+<!-- SIDEBAR -->
+<aside class="sidebar no-print">
+<div class="sb-nav">
+  <button class="sb-nav-btn active" data-tab="plan" onclick="setSidebarTab('plan')">Plan</button>
+  <button class="sb-nav-btn" data-tab="session" onclick="setSidebarTab('session')">Session</button>
+  <button class="sb-nav-btn" data-tab="settings" onclick="setSidebarTab('settings')">Settings</button>
+</div>
+
+<!-- PLAN PANEL: groups, position splits, absences -->
+<div class="sb-panel active" id="sbPanel-plan">
+  <div class="card">
+    <div class="card-hd">
+      <span class="card-title">Groups</span>
+      <button class="btn btn-ghost" style="height:22px;font-size:11px;padding:0 8px" onclick="addGroup()">+ Add</button>
+    </div>
+    <div class="card-bd" style="padding:8px">
+      <div class="groups-list" id="groupsList"></div>
+      <div class="absent-wrap">
+        <div class="absent-label">Absent / Unavailable</div>
+        <textarea id="absentPlayers" placeholder="Names of absent or unavailable players&hellip;" oninput="S.absentPlayers=this.value"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd">
+      <span class="card-title">Position Splits</span>
+      <label class="toggle-switch" title="Enable position-based splits">
+        <input type="checkbox" id="posSplitsToggle" onchange="togglePosSplits(this.checked)">
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+    <div class="card-bd" style="padding:8px 10px" id="posSplitsSidebarBody">
+      <div class="pos-disabled-hint">Enable to add position-specific drills</div>
+    </div>
+  </div>
+</div><!-- /sbPanel-plan -->
+
+<!-- SESSION PANEL: location, timing, notes -->
+<div class="sb-panel" id="sbPanel-session">
+  <div class="card">
+    <div class="card-hd"><span class="card-title">&#128205; Location</span></div>
+    <div class="card-bd">
+      <div class="loc-input-wrap">
+        <input type="text" id="locationName" placeholder="Venue name&hellip;" oninput="S.location=this.value;updateLocLink()">
+        <input type="url" id="locationMapsUrl" placeholder="Paste Google Maps link&hellip;" oninput="S.locationMapsUrl=this.value.trim();updateLocLink()">
+        <a id="locMapsBtn" class="loc-maps-btn" target="_blank" rel="noopener">&#128205; Open in Google Maps</a>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><span class="card-title">Pre-Session</span></div>
+    <div class="card-bd">
+      <div class="presess-row"><label>Meeting time</label><input type="time" id="preSessionTime" oninput="S.preSession.time=this.value"></div>
+      <textarea id="preSessionNotes" placeholder="Coach meeting agenda, lineup discussion&hellip;"></textarea>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><span class="card-title">Warmup</span></div>
+    <div class="card-bd">
+      <div class="warmup-dur-row">
+        <label>Duration:</label>
+        <input type="number" id="warmupDuration" value="20" min="5" max="60" style="width:50px;text-align:center">
+        <span>min</span>
+      </div>
+      <textarea id="warmupNotes" placeholder="Dynamic stretch, throwing warmup&hellip;"></textarea>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><span class="card-title">Session Notes</span></div>
+    <div class="card-bd"><textarea id="sessionNotes" placeholder="General reminders, weather notes&hellip;"></textarea></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><span class="card-title">Session Length</span></div>
+    <div class="card-bd">
+      <div class="warmup-dur-row">
+        <label>Total length:</label>
+        <input type="number" id="sessionLength" value="180" min="30" max="480" style="width:58px;text-align:center">
+        <span>min</span>
+      </div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:2px" id="sessionEndTime"></div>
+    </div>
+  </div>
+</div><!-- /sbPanel-session -->
+
+<!-- SETTINGS PANEL -->
+<div class="sb-panel" id="sbPanel-settings">
+  <div class="card">
+    <div class="card-hd">
+      <span class="card-title">Firebase</span>
+      <div class="fb-status idle" id="fbStatus"><div class="fb-dot"></div><span id="fbStatusTxt">Not connected</span></div>
+    </div>
+    <div class="firebase-card-bd">
+      <input type="url" id="firebaseUrl" placeholder="https://your-project.firebaseio.com" oninput="S.firebaseUrl=(this.value||'').trim().replace(/\/$/,'');fbStatusUpdate()">
+      <div class="fb-setup-hint" id="fbHint" style="display:none">Visit <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a> &#8594; New project &#8594; Realtime Database &#8594; copy URL.<br><br>Rules:<code style="display:block;margin-top:4px;font-size:10px;color:var(--text-2);white-space:pre-wrap">{"rules":{"nt":{"sessions":{"$date":{".read":true,".write":true}}}}}</code></div>
+      <button class="btn btn-ghost" style="width:100%;font-size:11px" onclick="toggleFbHint()">&#9881; Setup guide</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><span class="card-title">App</span></div>
+    <div class="card-bd" style="display:flex;flex-direction:column;gap:7px">
+      <button class="btn btn-ghost" style="width:100%;font-size:11.5px;justify-content:center" onclick="openSessionsModal()">&#128193; Load Saved Session</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:11.5px;justify-content:center" onclick="downloadApp()">&#8595; Download Updated App</button>
+    </div>
+  </div>
+</div><!-- /sbPanel-settings -->
+
+</aside>
+<!-- MAIN AREA: tab bar + tab content -->
+<div class="main-area">
+  <div class="tab-bar no-print" id="tabBar"></div>
+  <div class="tab-content" id="tabContent"></div>
+</div>
+</div><!-- /app-body -->
+</div><!-- /#app -->
+<!-- READ-ONLY -->
+<div id="readOnlyView"></div>
+<div id="roVideoModal" onclick="if(event.target===this)roCloseVideo()">
+  <div class="ro-video-panel">
+    <div class="ro-video-panel-hd"><h3 id="roVideoTitle">Video</h3><button class="btn-icon" onclick="roCloseVideo()">&#10005;</button></div>
+    <div class="ro-video-content" id="roVideoContent"></div>
+  </div>
+</div>
+<!-- SHARE -->
+<div class="backdrop centered no-print" id="shareBackdrop" onclick="backdropClose(event,'shareBackdrop')">
+  <div class="panel panel-center" style="max-width:500px">
+    <div class="panel-hd"><h2 id="shareModalTitle">Session Link</h2><button class="btn-icon" onclick="closeModal('shareBackdrop')">&#10005;</button></div>
+    <div class="panel-body" style="padding:16px"><div id="shareModalBody"></div></div>
+    <div class="panel-ft"><button class="btn btn-ghost" onclick="closeModal('shareBackdrop')">Close</button><button class="btn btn-primary" id="copyLinkBtn" onclick="copyShareLink()">&#128203; Copy Link</button></div>
+  </div>
+</div>
+<!-- SESSIONS -->
+<div class="backdrop centered no-print" id="sessionsBackdrop" onclick="backdropClose(event,'sessionsBackdrop')">
+  <div class="panel panel-center" style="max-width:560px;max-height:75vh">
+    <div class="panel-hd"><h2>Saved Sessions</h2><input type="search" id="sessSearch" placeholder="Search&hellip;" style="height:28px;font-size:12px;flex:1;max-width:180px" oninput="renderSessionsList(this.value)"><button class="btn-icon" onclick="closeModal('sessionsBackdrop')">&#10005;</button></div>
+    <div class="panel-body" id="sessionsListBody" style="padding:0"></div>
+    <div class="panel-ft" style="justify-content:space-between"><span style="font-size:11px;color:var(--text-3)" id="sessCount"></span><button class="btn btn-ghost" onclick="closeModal('sessionsBackdrop')">Close</button></div>
+  </div>
+</div>
+<!-- PICKER -->
+<div class="backdrop no-print" id="pickerBackdrop" onclick="backdropClose(event,'pickerBackdrop')">
+  <div class="panel">
+    <div class="panel-hd"><h2>Drill Library</h2><button class="btn-icon" onclick="closeModal('pickerBackdrop')">&#10005;</button></div>
+    <div class="picker-targets" id="pickerTargets"></div>
+    <div class="search-wrap"><span class="search-icon">&#8981;</span><input class="search-inp" type="search" id="drillSearch" placeholder="Search drills&hellip;" oninput="filterDrills()"></div>
+    <div class="panel-body" id="pickerCats"></div>
+    <div class="panel-ft"><button class="btn btn-ghost" onclick="openDrillEditor(null);closeModal('pickerBackdrop')">&#65291; New Custom Drill</button></div>
+  </div>
+</div>
+<!-- VIDEO -->
+<div class="backdrop centered no-print" id="videoBackdrop" onclick="backdropClose(event,'videoBackdrop')">
+  <div class="panel panel-center" style="max-width:620px">
+    <div class="panel-hd"><h2 id="videoTitle">Video</h2><button class="btn-icon" onclick="closeModal('videoBackdrop')">&#10005;</button></div>
+    <div class="video-wrap" id="videoWrap"></div>
+  </div>
+</div>
+<!-- DRILL EDITOR -->
+<div class="backdrop centered no-print" id="editorBackdrop" onclick="backdropClose(event,'editorBackdrop')">
+  <div class="panel panel-center">
+    <div class="panel-hd"><h2 id="editorTitle">Add Custom Drill</h2><button class="btn-icon" onclick="closeModal('editorBackdrop')">&#10005;</button></div>
+    <div class="panel-body" style="padding:14px 16px">
+      <div class="form-grp"><label class="form-lbl">Drill Name *</label><input type="text" class="form-inp" id="edName" placeholder="e.g. Live BP, Slow Rollers&hellip;"></div>
+      <div class="form-grp"><label class="form-lbl">Category</label><select class="form-sel" id="edCat"><option>Hitting</option><option>Infield</option><option>Outfield</option><option>Pitching</option><option>Catching</option><option selected>Custom</option></select></div>
+      <div class="form-grp"><label class="form-lbl">Description (optional)</label><textarea class="form-inp" id="edDesc" style="min-height:54px" placeholder="Brief description&hellip;"></textarea></div>
+      <div class="form-grp"><label class="form-lbl">Video URL (optional)</label>
+        <input type="url" class="form-inp" id="edVideo" placeholder="YouTube, Instagram, or Google Drive URL&hellip;" oninput="liveVideoPreview('edVideo','edVPreview','edVBadge','edVText')">
+        <div id="edVPreview" style="display:none"><div class="video-preview-row"><span class="vtype-badge" id="edVBadge"></span><span id="edVText" style="color:var(--text-2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button class="btn-vid-sm" onclick="quickPreview('edVideo')">&#9654; Preview</button></div></div>
+      </div>
+    </div>
+    <div class="panel-ft"><input type="hidden" id="edId"><button class="btn btn-ghost" onclick="closeModal('editorBackdrop')">Cancel</button><button class="btn btn-primary" onclick="saveDrill()">Save Drill</button></div>
+  </div>
+</div>
+<!-- LIBRARY MANAGER -->
+<div class="backdrop centered no-print" id="mgrBackdrop" onclick="backdropClose(event,'mgrBackdrop')">
+  <div class="panel panel-center" style="max-width:720px;max-height:90vh">
+    <div class="panel-hd"><h2>Drill Library Manager</h2><div style="display:flex;gap:6px;margin-left:auto"><button class="btn btn-ghost" style="font-size:11.5px" onclick="importCSV()">Import CSV</button><button class="btn btn-primary" style="font-size:11.5px" onclick="openDrillEditor(null)">&#65291; New Drill</button></div><button class="btn-icon" onclick="closeModal('mgrBackdrop')">&#10005;</button></div>
+    <div class="panel-body" style="padding:0;overflow-y:auto" id="mgrTableWrap"></div>
+    <div class="panel-ft" style="justify-content:space-between"><span style="font-size:11px;color:var(--text-3)" id="mgrCount"></span><button class="btn btn-ghost" onclick="downloadApp()">&#8595; Download Updated App</button></div>
+  </div>
+</div>
+<!-- ROTATION BUILDER -->
+<div class="backdrop centered no-print" id="rotationBackdrop" onclick="backdropClose(event,'rotationBackdrop')">
+  <div class="panel panel-center" style="max-width:620px">
+    <div class="panel-hd"><h2>&#10227; Build Group Rotation</h2><button class="btn-icon" onclick="closeModal('rotationBackdrop')">&#10005;</button></div>
+    <div class="panel-body" style="padding:0">
+      <div id="rbStationsList" class="rb-stations-list"></div>
+      <div class="rb-settings-row">
+        <div class="rb-setting"><label>Slot duration</label><input type="number" id="rbSlotDur" value="25" min="5" max="120"><span style="font-size:12px;color:var(--text-3)">min</span></div>
+        <div class="rb-setting"><label>Preview start</label><input type="time" id="rbStartTime" value="11:30"></div>
+        <div class="rb-setting"><label>Rounds</label><input type="number" id="rbRounds" min="1" max="12" placeholder="auto" style="width:50px"><span style="font-size:10.5px;color:var(--text-3)">(blank&#8239;= auto)</span></div>
+      </div>
+      <div class="rb-preview-wrap"><div id="rbPreview" class="rb-empty">Select stations above to preview the schedule.</div></div>
+    </div>
+    <div class="panel-ft" style="justify-content:space-between">
+      <button class="btn btn-ghost" onclick="renderRbPreview()">&#8635; Preview</button>
+      <div style="display:flex;gap:7px"><button class="btn btn-ghost" onclick="closeModal('rotationBackdrop')">Cancel</button><button class="btn btn-primary" onclick="buildRotation()">Generate Rotation</button></div>
+    </div>
+  </div>
+</div>
+<div class="toast-rack" id="toastRack"></div>
+
+<script>
+'use strict';
+const NT_FIREBASE_URL='';
+const APP_BASE_URL='';
+const GROUP_COLORS=['blue','green','amber','purple','red','teal','pri','pink'];
+const GROUP_COLOR_HEX={blue:'#2464B0',green:'#166534',amber:'#92400e',purple:'#5b21b6',red:'#D94010',teal:'#0e7490',pri:'#3A8CD4',pink:'#9d174d'};
+const BUILTIN=[
+  {id:'HIT001',name:'Live BP',cat:'Hitting',desc:'Live batting practice.',video:'',bi:true},
+  {id:'HIT002',name:'Tee Work',cat:'Hitting',desc:'Batting tee work.',video:'',bi:true},
+  {id:'HIT003',name:'Soft Toss',cat:'Hitting',desc:'Partner soft toss.',video:'',bi:true},
+  {id:'HIT004',name:'Pitching Machine BP',cat:'Hitting',desc:'BP off pitching machine.',video:'',bi:true},
+  {id:'HIT005',name:'Front Toss',cat:'Hitting',desc:'Front toss for timing.',video:'',bi:true},
+  {id:'HIT006',name:'Situational BP',cat:'Hitting',desc:'Situational batting practice.',video:'',bi:true},
+  {id:'HIT007',name:'Long Toss BP',cat:'Hitting',desc:'BP following long toss.',video:'',bi:true},
+  {id:'INF001',name:'1 Hour Infield Drill',cat:'Infield',desc:'Full infield practice plan.',video:'',bi:true},
+  {id:'INF002',name:'Preset Backhand Pick & Stick',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF003',name:'Box Drill – 2B DP Feeds',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF004',name:'1B Receiving Short Hops',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF005',name:'Box Drill – SS DP Feeds',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF006',name:'Forehand Range Drill',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF007',name:'Backhand Pick & Stick (Fungo)',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF008',name:'2B Underhand Flip Drill',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF009',name:'Slow Rollers Fungo Drill',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF010',name:'30 Second Grounders Drill',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF011',name:'Right Left Shuffle Drill',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF012',name:'SS Flips to Second Base',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF013',name:'Rapid Fire Fungo Drill',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF014',name:'Preset Backhand Rake Drill',cat:'Infield',desc:'',video:'',bi:true},
+  {id:'INF015',name:'Around the Horn',cat:'Infield',desc:'Full team infield warmup.',video:'',bi:true},
+  {id:'INF016',name:'PFP – Pitcher Fielding Practice',cat:'Infield',desc:'Pitchers fielding their position.',video:'',bi:true},
+  {id:'OUTF001',name:'1 Hour Outfield Plan',cat:'Outfield',desc:'',video:'',bi:true},
+  {id:'OUTF002',name:'Drop Step Cones Drill',cat:'Outfield',desc:'',video:'',bi:true},
+  {id:'OUTF003',name:'Fly Balls Drill',cat:'Outfield',desc:'',video:'',bi:true},
+  {id:'OUTF004',name:'Grounders Drill',cat:'Outfield',desc:'',video:'',bi:true},
+  {id:'OUTF005',name:'Outfield Communication Drill',cat:'Outfield',desc:'',video:'',bi:true},
+  {id:'OUTF006',name:'Quarterback Over the Shoulder',cat:'Outfield',desc:'',video:'',bi:true},
+  {id:'OUTF007',name:'Read and React Drill',cat:'Outfield',desc:'',video:'',bi:true},
+  {id:'OUTF008',name:'Tandem Drill',cat:'Outfield',desc:'',video:'',bi:true},
+  {id:'OUTF009',name:'Outfield Relay Throws',cat:'Outfield',desc:'OF relay throw work.',video:'',bi:true},
+  {id:'PIT001',name:'Balance Drill',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT002',name:'Break of the Hands Drill',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT003',name:'Bunts – 1st Base Side',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT004',name:'Bunts – 3rd Base Side',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT005',name:'Comebackers Drill',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT006',name:'Cover 1st Base Drill',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT007',name:'Daily Flat Ground Work',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT008',name:'Daily Throwing Program',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT009',name:'One Knee Drill',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT010',name:'Power Position',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'PIT011',name:'Working in Set Position',cat:'Pitching',desc:'',video:'',bi:true},
+  {id:'CATF001',name:'Basic Blocking Drill',cat:'Catching',desc:'',video:'',bi:true},
+  {id:'CATF002',name:'Basic Receiving Drill',cat:'Catching',desc:'',video:'',bi:true},
+  {id:'CATF003',name:'Block Recover Throw Drill',cat:'Catching',desc:'',video:'',bi:true},
+  {id:'CATF004',name:'Cross Partner Framing Drill',cat:'Catching',desc:'',video:'',bi:true},
+  {id:'CATF005',name:'Drop and Block Line Drill',cat:'Catching',desc:'',video:'',bi:true},
+  {id:'CATF006',name:'No Glove Block Drill',cat:'Catching',desc:'',video:'',bi:true},
+  {id:'CATF007',name:'Tennis Ball Soft Hands',cat:'Catching',desc:'',video:'',bi:true},
+  {id:'CATF008',name:'Tic Tac Toe Drill',cat:'Catching',desc:'',video:'',bi:true},
+  {id:'BASE001',name:'Base Running – Leads',cat:'Custom',desc:'Primary and secondary lead work.',video:'',bi:true},
+  {id:'BASE002',name:'Base Running – Scenarios',cat:'Custom',desc:'Situational baserunning.',video:'',bi:true},
+  {id:'TEAM001',name:'Throwing Programme',cat:'Custom',desc:'Structured team throwing warmup.',video:'',bi:true},
+  {id:'TEAM002',name:'Team Fielding Practice',cat:'Custom',desc:'Full-team fielding.',video:'',bi:true},
+];
+const CUSTOM_DRILLS=[];
+const VIDEO_OVERRIDES={};
+
+// ── STATE ──────────────────────────────────────────────────────
+let S={
+  title:'National Team Training Session',date:'',startTime:'10:00',
+  location:'',locationMapsUrl:'',
+  preSession:{time:'',notes:''},
+  closing:{notes:''},
+  absentPlayers:'',
+  sessionLength:180,
+  warmupDur:20,warmupNotes:'',sessionNotes:'',
+  posSplits:{enabled:false,positions:[
+    {id:'ps_pit',name:'Pitchers',color:'red',drills:[]},
+    {id:'ps_of',name:'Outfielders',color:'blue',drills:[]},
+    {id:'ps_cif',name:'Catchers/Infielders',color:'purple',drills:[]}
+  ]},
+  groups:[{id:'g1',name:'Group A',color:'blue',players:''}],
+  drills:{'fs':[],'g1':[]},
+  splitTime:'',
+  custom:[...CUSTOM_DRILLS],overrides:{...VIDEO_OVERRIDES},
+  firebaseUrl:NT_FIREBASE_URL,_uid:1
+};
+
+let activeTab='fs';
+let pickerTarget='g1';
+let _mergeSource=null;
+let _loadedSessionKey=null;
+let _fbPollTimer=null;
+let _lastPublishedHash=null;
+let _rbStations=[];
+
+let sidebarTab='plan';
+function setSidebarTab(t){
+  sidebarTab=t;
+  document.querySelectorAll('.sb-nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  document.querySelectorAll('.sb-panel').forEach(p=>p.classList.toggle('active',p.id==='sbPanel-'+t));
+}
+
+// ── LIBRARY ────────────────────────────────────────────────────
+function lib(){return[...BUILTIN.map(d=>({...d,video:S.overrides[d.id]||d.video})),...S.custom];}
+function getDrill(id){return lib().find(d=>d.id===id);}
+function uid(){return 'u'+(S._uid++);}
+function isPostarget(tid){return S.posSplits.positions.some(p=>p.id===tid);}
+function getDrillsArray(tid){
+  if(tid==='fs'){if(!S.drills.fs)S.drills.fs=[];return S.drills.fs;}
+  if(isPostarget(tid)){const p=S.posSplits.positions.find(p=>p.id===tid);return p?p.drills:null;}
+  return S.drills[tid]||null;
+}
+
+// ── VIDEO ──────────────────────────────────────────────────────
+function videoType(url){
+  if(!url)return null;
+  if(/youtube\.com|youtu\.be/.test(url))return 'youtube';
+  if(/instagram\.com/.test(url))return 'instagram';
+  if(/drive\.google\.com/.test(url))return 'gdrive';
+  return 'unknown';
+}
+function videoTypeName(url){return{youtube:'YouTube',instagram:'Instagram',gdrive:'Google Drive',unknown:'Link'}[videoType(url)]||'';}
+function embedUrl(url){
+  if(!url)return null;
+  const t=videoType(url);
+  if(t==='youtube'){const m=url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);if(m)return'https://www.youtube.com/embed/'+m[1]+'?autoplay=1&rel=0';}
+  if(t==='gdrive'){const m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);if(m)return'https://drive.google.com/file/d/'+m[1]+'/preview';}
+  return null;
+}
+function liveVideoPreview(inpId,previewId,badgeId,textId){
+  const url=document.getElementById(inpId).value.trim(),t=videoType(url);
+  if(!url||!t){document.getElementById(previewId).style.display='none';return;}
+  document.getElementById(previewId).style.display='block';
+  const b=document.getElementById(badgeId);
+  b.textContent={youtube:'YouTube',instagram:'Instagram',gdrive:'Google Drive',unknown:'URL'}[t]||'URL';
+  b.className='vtype-badge vtype-'+t;
+  document.getElementById(textId).textContent=url;
+}
+function quickPreview(inpId){const url=document.getElementById(inpId).value.trim();if(!url){toast('Enter a URL first','err');return;}openVideoModalDirect({name:'Preview',video:url});}
+function openVideoModal(drillId){const d=getDrill(drillId);if(!d||!d.video)return;openVideoModalDirect(d);}
+function openVideoUrl(url,name){openVideoModalDirect({name:name||'Video',video:url});}
+function openVideoModalDirect(d){
+  document.getElementById('videoTitle').textContent=d.name;
+  const wrap=document.getElementById('videoWrap'),t=videoType(d.video),eu=embedUrl(d.video);
+  if(t==='youtube'||t==='gdrive')wrap.innerHTML='<iframe src="'+eu+'" allowfullscreen allow="autoplay;fullscreen"></iframe>';
+  else if(t==='instagram')wrap.innerHTML='<div style="padding:24px;text-align:center"><p style="color:var(--text-2);font-size:13px;margin-bottom:16px">Instagram videos can\'t be embedded.</p><a href="'+escHtml(d.video)+'" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-flex">Open on Instagram &#8599;</a></div>';
+  else wrap.innerHTML='<div style="padding:24px;text-align:center"><a href="'+escHtml(d.video)+'" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-flex">Open Video &#8599;</a></div>';
+  openModal('videoBackdrop');
+}
+
+// ── TIME ───────────────────────────────────────────────────────
+function parseMin(str){if(!str)return null;const[h,m]=str.split(':').map(Number);return h*60+m;}
+function fmtTime(m){return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
+function mainStart(){const s=parseMin(S.startTime);return s==null?null:s+(parseInt(S.warmupDur)||20);}
+function sessionAvail(){const ms=mainStart();if(ms==null)return parseInt(S.sessionLength)||180;const start=parseMin(S.startTime)||0;return start+(parseInt(S.sessionLength)||180)-ms;}
+function updateSessionEndTime(){const start=parseMin(S.startTime),len=parseInt(S.sessionLength)||180,el=document.getElementById('sessionEndTime');if(!el)return;if(start!=null){el.textContent='Ends ~'+fmtTime(start+len);}else{el.textContent='';} }
+function totalDur(arr){return arr.reduce((t,d)=>t+(parseInt(d.dur)||20),0);}
+// Split time: manual override or auto end-of-full-squad
+function rotationStart(){
+  if(S.splitTime){const m=parseMin(S.splitTime);if(m!=null)return m;}
+  const ms=mainStart();if(ms==null)return null;
+  return ms+totalDur(S.drills.fs||[]);
+}
+function rotationAvail(){
+  const rs=rotationStart();if(rs==null)return parseInt(S.sessionLength)||180;
+  const start=parseMin(S.startTime)||0;
+  return start+(parseInt(S.sessionLength)||180)-rs;
+}
+function splitTimeDisplay(){
+  const rs=rotationStart();return rs!=null?fmtTime(rs):'—';
+}
+// ── RENDER ─────────────────────────────────────────────────────
+function renderAll(){
+  renderGroupsSidebar();
+  renderPosSplitsSidebar();
+  renderTabs();
+  syncControls();
+}
+
+function syncControls(){
+  document.getElementById('sessionTitle').textContent=S.title;
+  document.getElementById('sessionDate').value=S.date;
+  document.getElementById('sessionStart').value=S.startTime;
+  document.getElementById('warmupDuration').value=S.warmupDur;
+  document.getElementById('warmupNotes').value=S.warmupNotes;
+  document.getElementById('sessionNotes').value=S.sessionNotes;
+  const slEl=document.getElementById('sessionLength');if(slEl)slEl.value=S.sessionLength||180;
+  updateSessionEndTime();
+  // splitTime is rendered inline in the fs tab, no dedicated sidebar field
+  document.getElementById('locationName').value=S.location||'';
+  document.getElementById('locationMapsUrl').value=S.locationMapsUrl||'';
+  document.getElementById('firebaseUrl').value=S.firebaseUrl||'';
+  document.getElementById('absentPlayers').value=S.absentPlayers||'';
+  document.getElementById('preSessionTime').value=S.preSession.time||'';
+  document.getElementById('preSessionNotes').value=S.preSession.notes||'';
+  document.getElementById('posSplitsToggle').checked=!!(S.posSplits&&S.posSplits.enabled);
+  updateLocLink();fbStatusUpdate();
+}
+
+function updateLocLink(){
+  const btn=document.getElementById('locMapsBtn'),u=(S.locationMapsUrl||'').trim(),n=(S.location||'').trim();
+  if(u)btn.href=u;
+  else if(n)btn.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(n);
+  else btn.removeAttribute('href');
+}
+
+// ── GROUPS SIDEBAR ─────────────────────────────────────────────
+function renderGroupsSidebar(){
+  document.getElementById('groupsList').innerHTML=S.groups.map(g=>{
+    const hex=GROUP_COLOR_HEX[g.color]||'#2464B0';
+    const showMerge=_mergeSource===g.id;
+    const others=S.groups.filter(x=>x.id!==g.id);
+    return `<div class="group-item" data-gid="${g.id}">
+      <div class="group-item-hd">
+        <div class="group-dot-btn" style="background:${hex}" onclick="cycleGroupColor('${g.id}')"></div>
+        <input class="group-name-inp" type="text" value="${escAttr(g.name)}" placeholder="Group name…" oninput="updateGroupName('${g.id}',this.value)">
+        ${S.groups.length>1?`<button class="btn-icon" title="Merge" style="font-size:11px;color:var(--text-3)" onclick="toggleMerge('${g.id}')">&#8862;</button>`:''}
+        ${S.groups.length>1?`<button class="btn-icon" style="color:var(--text-3)" title="Remove" onclick="removeGroup('${g.id}')">&#10005;</button>`:''}
+      </div>
+      <textarea class="group-players-inp" placeholder="Player names…" oninput="updateGroupPlayers('${g.id}',this.value)">${escHtml(g.players||'')}</textarea>
+      ${showMerge&&others.length?`<div class="group-merge-row">
+        <label>Into:</label>
+        <select class="group-merge-sel" id="msel-${g.id}">${others.map(o=>`<option value="${o.id}">${escHtml(o.name)}</option>`).join('')}</select>
+        <button class="btn btn-ghost" style="height:24px;font-size:11px;padding:0 8px" onclick="confirmMerge('${g.id}')">&#10003; Merge</button>
+        <button class="btn-icon" onclick="toggleMerge(null)">&#10005;</button>
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function addGroup(){
+  if(S.groups.length>=8){toast('Max 8 groups','err');return;}
+  const idx=S.groups.length,color=GROUP_COLORS[idx%GROUP_COLORS.length];
+  const id='g'+Date.now();
+  const names=['Group A','Group B','Group C','Group D','Group E','Group F','Group G','Group H'];
+  S.groups.push({id,name:names[idx]||'Group '+(idx+1),color,players:''});
+  S.drills[id]=[];
+  renderAll();
+  setTimeout(()=>{const items=document.querySelectorAll('.group-item');const last=items[items.length-1];if(last)last.querySelector('.group-name-inp').focus();},50);
+}
+function removeGroup(id){
+  if(S.groups.length<=1){toast('Need at least one group','err');return;}
+  if(!confirm('Remove this group and all its drills?'))return;
+  S.groups=S.groups.filter(g=>g.id!==id);delete S.drills[id];
+  if(activeTab===id)activeTab=S.groups[0].id;
+  if(pickerTarget===id)pickerTarget=S.groups[0].id;
+  _mergeSource=null;renderAll();
+}
+function toggleMerge(id){_mergeSource=(_mergeSource===id)?null:id;renderGroupsSidebar();}
+function confirmMerge(srcId){
+  const sel=document.getElementById('msel-'+srcId);if(!sel)return;
+  const tgtId=sel.value;
+  const src=S.groups.find(g=>g.id===srcId),tgt=S.groups.find(g=>g.id===tgtId);
+  if(!src||!tgt)return;
+  tgt.players=[tgt.players||'',src.players||''].filter(s=>s.trim()).join('\n');
+  S.groups=S.groups.filter(g=>g.id!==srcId);delete S.drills[srcId];
+  if(activeTab===srcId)activeTab=tgtId;
+  if(pickerTarget===srcId)pickerTarget=tgtId;
+  _mergeSource=null;renderAll();
+  toast(src.name+' merged into '+tgt.name,'ok');
+}
+function updateGroupName(id,name){const g=S.groups.find(x=>x.id===id);if(g){g.name=name;renderTabBar();}}
+function updateGroupPlayers(id,val){const g=S.groups.find(x=>x.id===id);if(g)g.players=val;}
+function cycleGroupColor(id){
+  const g=S.groups.find(x=>x.id===id);if(!g)return;
+  g.color=GROUP_COLORS[(GROUP_COLORS.indexOf(g.color)+1)%GROUP_COLORS.length];
+  renderGroupsSidebar();renderTabBar();
+  if(activeTab===id){
+    const tc=document.getElementById('tabContent');
+    if(tc){const hd=tc.querySelector('.tc-hd');if(hd){const hex=GROUP_COLOR_HEX[g.color]||'#2464B0';hd.style.borderLeftColor=hex;hd.style.setProperty('--gc',hex);}}
+  }
+}
+
+// ── POSITION SPLITS ────────────────────────────────────────────
+function togglePosSplits(enabled){
+  S.posSplits.enabled=enabled;
+  renderPosSplitsSidebar();renderTabBar();
+  if(!enabled&&isPostarget(activeTab))activeTab=S.groups[0].id;
+}
+function renderPosSplitsSidebar(){
+  document.getElementById('posSplitsToggle').checked=!!(S.posSplits&&S.posSplits.enabled);
+  const body=document.getElementById('posSplitsSidebarBody');
+  if(!S.posSplits||!S.posSplits.enabled){body.innerHTML='<div class="pos-disabled-hint">Enable to add position-specific drills</div>';return;}
+  body.innerHTML='<div class="pos-items-list">'+S.posSplits.positions.map((pos,i)=>{
+    const hex=GROUP_COLOR_HEX[pos.color]||'#2464B0',cnt=(pos.drills||[]).length;
+    return `<div class="pos-item">
+      <div class="pos-item-dot" style="background:${hex}" onclick="cyclePosColor(${i})"></div>
+      <input class="pos-item-name" type="text" value="${escAttr(pos.name)}" oninput="updatePosName(${i},this.value)">
+      ${cnt?`<span class="pos-item-count">${cnt} drills</span>`:''}
+      <button class="btn-icon" style="color:var(--text-3)" onclick="openPicker('${pos.id}')">&#65291;</button>
+    </div>`;
+  }).join('')+'</div>';
+}
+function cyclePosColor(i){const p=S.posSplits.positions[i];if(!p)return;p.color=GROUP_COLORS[(GROUP_COLORS.indexOf(p.color)+1)%GROUP_COLORS.length];renderPosSplitsSidebar();renderTabBar();}
+function updatePosName(i,name){const p=S.posSplits.positions[i];if(p){p.name=name;renderTabBar();}}
+
+// ── TAB BAR ────────────────────────────────────────────────────
+function renderTabBar(){
+  const bar=document.getElementById('tabBar');if(!bar)return;
+  // Ensure activeTab is valid
+  const allIds=['fs',...S.groups.map(g=>g.id),...(S.posSplits&&S.posSplits.enabled?S.posSplits.positions.map(p=>p.id):[])];
+  if(!allIds.includes(activeTab))activeTab='fs';
+
+  // Full Squad tab — always first
+  const fsCnt=(S.drills.fs||[]).length;
+  let html=`<button class="tab-btn-fs ${activeTab==='fs'?'active':''}" onclick="setActiveTab('fs')">
+    <span class="tab-fs-icon">&#9670;</span>Full Squad
+    ${fsCnt?`<span class="tab-count">${fsCnt}</span>`:''}
+  </button>`;
+
+  // Separator before rotation groups
+  html+=`<span class="tab-rot-sep">Rotation</span>`;
+
+  html+=S.groups.map(g=>{
+    const hex=GROUP_COLOR_HEX[g.color]||'#2464B0';
+    const cnt=(S.drills[g.id]||[]).length;
+    const active=activeTab===g.id?'active':'';
+    return `<button class="tab-btn gc-${g.color} ${active}" style="--gc:${hex};--gc-bg:${hex}1a;--gc-bdr:${hex}4d" onclick="setActiveTab('${g.id}')">
+      <span class="tab-dot" style="background:${hex}"></span>${escHtml(g.name)}
+      ${cnt?`<span class="tab-count">${cnt}</span>`:''}
+    </button>`;
+  }).join('');
+
+  if(S.posSplits&&S.posSplits.enabled){
+    html+='<span class="tab-sep">Positions</span>';
+    html+=S.posSplits.positions.map(pos=>{
+      const hex=GROUP_COLOR_HEX[pos.color]||'#2464B0';
+      const cnt=(pos.drills||[]).length;
+      const active=activeTab===pos.id?'active':'';
+      return `<button class="tab-btn gc-${pos.color} ${active}" style="--gc:${hex};--gc-bg:${hex}1a;--gc-bdr:${hex}4d" onclick="setActiveTab('${pos.id}')">
+        <span class="tab-dot" style="background:${hex}"></span>${escHtml(pos.name)}
+        ${cnt?`<span class="tab-count">${cnt}</span>`:''}
+      </button>`;
+    }).join('');
+  }
+  html+='<button class="tab-add-btn no-print" onclick="addGroup()">&#65291; Group</button>';
+  bar.innerHTML=html;
+}
+
+// ── TAB CONTENT ────────────────────────────────────────────────
+function setActiveTab(tid){
+  activeTab=tid;
+  renderTabBar();
+  renderTabContent();
+}
+
+function renderTabs(){
+  renderTabBar();
+  renderTabContent();
+}
+
+function renderTabContent(){
+  const tc=document.getElementById('tabContent');if(!tc)return;
+  if(!activeTab)return;
+
+  // ── FULL SQUAD TAB ────────────────────────────────────────────
+  if(activeTab==='fs'){
+    const arr=S.drills.fs||[], used=totalDur(arr);
+    const isAuto=!S.splitTime;
+    const splitDisp=splitTimeDisplay();
+    tc.innerHTML=`
+      <div class="tc-hd" style="border-left:3px solid var(--text-3)">
+        <div class="tc-hd-row">
+          <span class="tab-fs-icon" style="font-size:16px">&#9670;</span>
+          <span class="tc-name">Full Squad</span>
+          <span style="font-size:11px;color:var(--text-3);background:var(--bg-raised);padding:2px 9px;border-radius:6px;margin-left:4px">${used} min</span>
+          <button class="btn btn-ghost no-print" style="margin-left:auto;font-size:12px" onclick="openPicker('fs')">&#65291; Add Drill</button>
+        </div>
+      </div>
+      <div class="tc-body" id="tcDrillList">${renderDrillList('fs')}</div>
+      <div class="tc-split-footer no-print">
+        <span class="tc-split-label">Groups split at</span>
+        <span class="tc-split-time">${escHtml(splitDisp)}</span>
+        ${isAuto?`<span class="tc-split-auto">auto</span>`:''}
+        <span style="flex:1"></span>
+        <input class="tc-split-inp" type="time" value="${escAttr(S.splitTime||splitDisp)}" oninput="setSplitTime(this.value)" title="Override split time">
+        ${!isAuto?`<button class="tc-split-reset" onclick="setSplitTime('')">&#8635; auto</button>`:''}
+      </div>
+      <div class="tc-footer no-print"><button class="tc-add-btn" onclick="openPicker('fs')">&#65291; Add Full Squad Drill</button></div>
+    `;
+    return;
+  }
+
+  // ── POSITION SPLIT TAB ────────────────────────────────────────
+  const isPt=isPostarget(activeTab);
+  if(isPt){
+    const pos=S.posSplits.positions.find(p=>p.id===activeTab);if(!pos)return;
+    const hex=GROUP_COLOR_HEX[pos.color]||'#2464B0';
+    tc.innerHTML=`
+      <div class="tc-hd gc-${pos.color}" style="--gc:${hex};--gc-bg:${hex}1a;--gc-bdr:${hex}4d;border-left:3px solid ${hex}">
+        <div class="tc-hd-row">
+          <div class="tc-dot"></div>
+          <span class="tc-name">${escHtml(pos.name)}</span>
+          <span class="tc-pos-badge">Position Split</span>
+          <button class="btn btn-ghost no-print" style="margin-left:auto;font-size:12px" onclick="openPicker('${pos.id}')">&#65291; Add Drill</button>
+        </div>
+      </div>
+      <div class="tc-body" id="tcDrillList">${renderDrillList(activeTab)}</div>
+      <div class="tc-footer no-print"><button class="tc-add-btn" style="--gc:${hex};--gc-bg:${hex}1a" onclick="openPicker('${activeTab}')">&#65291; Add Drill to ${escHtml(pos.name)}</button></div>
+    `;
+    return;
+  }
+
+  // ── GROUP ROTATION TAB ────────────────────────────────────────
+  const g=S.groups.find(x=>x.id===activeTab);if(!g)return;
+  const hex=GROUP_COLOR_HEX[g.color]||'#2464B0';
+  const players=(g.players||'').split(/[\n,]+/).map(p=>p.trim()).filter(Boolean);
+  const arr=S.drills[g.id]||[], used=totalDur(arr), avail=rotationAvail();
+  const pct=Math.min(100,avail>0?(used/avail)*100:100), over=used>avail;
+  const rs=rotationStart(), rsDisp=rs!=null?fmtTime(rs):'—';
+  tc.innerHTML=`
+    <div class="tc-hd gc-${g.color}" style="--gc:${hex};--gc-bg:${hex}1a;--gc-bdr:${hex}4d;border-left:3px solid ${hex}">
+      <div class="tc-hd-row">
+        <div class="tc-dot"></div>
+        <span class="tc-name">${escHtml(g.name)}</span>
+        ${players.length?`<span class="tc-players">&#128101; ${players.join(', ')}</span>`:''}
+        <button class="btn btn-ghost no-print" style="margin-left:auto;font-size:12px" onclick="openPicker('${g.id}')">&#65291; Add Drill</button>
+      </div>
+      <div class="tc-timeline" id="tcTimeline">
+        <div class="tc-tl-row">
+          <span id="tcUsed">${used} min used</span>
+          <span id="tcLeft" ${over?'class="over"':''}>${over?(used-avail)+' min over &#9888;':(avail-used)+' min left'}</span>
+        </div>
+        <div class="tc-tl-track"><div class="tc-tl-fill ${over?'tc-timeline-over':''}" id="tcFill" style="width:${pct}%;background:${hex}"></div></div>
+      </div>
+    </div>
+    <div class="tc-rot-from no-print"><span class="tc-rot-from-label">&#9670; Full Squad ends &rarr; Rotation from</span><span class="tc-rot-from-time">${escHtml(rsDisp)}</span><span style="flex:1"></span><button class="btn-icon" title="Edit split time" style="font-size:11px" onclick="setActiveTab('fs')">Edit &#8599;</button></div>
+    <div class="tc-body" id="tcDrillList">${renderDrillList(activeTab)}</div>
+    <div class="tc-footer no-print"><button class="tc-add-btn" style="--gc:${hex};--gc-bg:${hex}1a" onclick="openPicker('${activeTab}')">&#65291; Add Drill to ${escHtml(g.name)}</button></div>
+  `;
+}
+
+function renderTimeline(){
+  if(!activeTab||activeTab==='fs'||isPostarget(activeTab))return;
+  const g=S.groups.find(x=>x.id===activeTab);if(!g)return;
+  const arr=S.drills[g.id]||[],used=totalDur(arr),avail=rotationAvail();
+  const pct=Math.min(100,avail>0?(used/avail)*100:100),over=used>avail;
+  const hex=GROUP_COLOR_HEX[g.color]||'#2464B0';
+  const fill=document.getElementById('tcFill'),usedEl=document.getElementById('tcUsed'),leftEl=document.getElementById('tcLeft');
+  if(fill){fill.style.width=pct+'%';fill.style.background=over?'var(--red)':hex;fill.classList.toggle('tc-timeline-over',over);}
+  if(usedEl)usedEl.textContent=used+' min used';
+  if(leftEl){leftEl.textContent=over?(used-avail)+' min over ⚠':(avail-used)+' min left';leftEl.classList.toggle('over',over);}
+}
+
+// ── DRILL LIST RENDERER ────────────────────────────────────────
+function renderDrillList(tid){
+  const arr=getDrillsArray(tid)||[];
+  if(!arr.length){
+    const isFs=tid==='fs';
+    return `<div class="tc-empty">
+      <div class="tc-empty-title">No drills yet</div>
+      <div class="tc-empty-sub">${isFs
+        ?'Add drills here for activities the whole squad does together — warmup throws, around the horn, team fielding, etc.'
+        :'Use <strong>&#65291; Add Drill</strong> above, or open the <strong>&#10227; Rotation</strong> builder to auto-fill a full rotation schedule.'
+      }</div>
+    </div>`;
+  }
+  // Full squad starts at mainStart; groups start at rotationStart; positions at rotationStart
+  const clockBase = (tid==='fs'||isPostarget(tid)) ? (mainStart()!=null?mainStart():0) : (rotationStart()!=null?rotationStart():mainStart()!=null?mainStart():0);
+  let running=clockBase;
+  return arr.map((sd,i)=>{
+    const d=getDrill(sd.did);if(!d){running+=(parseInt(sd.dur)||20);return '';}
+    const slotStart=running;  // this drill's start minute
+    const autoT=fmtTime(slotStart);
+    const dispTime=sd.start||autoT;
+    const isManual=!!(sd.start&&sd.start!==autoT);
+    running+=(parseInt(sd.dur)||20);  // advance clock for next drill
+    const evids=sd.extraVideos||[];
+    return `<div class="drill-card" data-uid="${sd.uid}">
+      <div class="dc-hd">
+        <div class="dc-time${isManual?' manual':''}" onclick="promptDrillTime('${tid}','${sd.uid}')" title="${isManual?'Manually set — click to change':'Auto-calculated — click to override'}">
+          ${escHtml(dispTime)}
+          ${isManual?`<span class="dc-time-reset" onclick="event.stopPropagation();clearDrillTime('${tid}','${sd.uid}')">&#8635; auto</span>`:''}
+        </div>
+        <div class="dc-info">
+          <div class="dc-name-row">
+            <span class="dc-name">${escHtml(d.name)}</span>
+            ${d.video?`<button class="video-pill no-print" onclick="openVideoModal('${d.id}')">&#9654; ${videoTypeName(d.video)}</button>`:''}
+          </div>
+          <div class="dc-sub">
+            <span class="cat-badge cat-${d.cat}">${d.cat}</span>
+            <div class="dc-dur-field">
+              <label>Duration</label>
+              <input class="dc-dur" type="number" min="5" max="180" value="${sd.dur||20}" oninput="updateSDInTarget('${tid}','${sd.uid}','dur',this.value)">
+              <span style="font-size:10px;color:var(--text-3)">min</span>
+            </div>
+          </div>
+        </div>
+        <div class="dc-actions no-print">
+          <button class="btn-icon" title="Move up" onclick="moveDrillInTarget('${tid}','${sd.uid}',-1)">&#8593;</button>
+          <button class="btn-icon" title="Move down" onclick="moveDrillInTarget('${tid}','${sd.uid}',1)">&#8595;</button>
+          <button class="btn-icon" title="Remove" onclick="removeDrillFromTarget('${tid}','${sd.uid}')">&#10005;</button>
+        </div>
+      </div>
+      <div class="dc-body">
+        <span class="dc-field-lbl focus-lbl no-print">&#9733; Focus &mdash; shown to players</span>
+        <textarea class="dc-focus" placeholder="Key coaching cues, what players should focus on…" oninput="updateSDInTarget('${tid}','${sd.uid}','focus',this.value)">${escHtml(sd.focus||'')}</textarea>
+        <span class="dc-field-lbl notes-lbl no-print">Coach Notes (internal)</span>
+        <textarea class="dc-notes no-print" placeholder="Setup notes, equipment, rep schemes…" oninput="updateSDInTarget('${tid}','${sd.uid}','notes',this.value)">${escHtml(sd.notes||'')}</textarea>
+        <div class="dc-evids no-print">
+          ${evids.map((v,vi)=>`<div class="dc-evid-row">
+            <span class="vtype-badge vtype-${videoType(v)||'unknown'}">${videoTypeName(v)||'Link'}</span>
+            <a href="${escHtml(v)}" target="_blank" rel="noopener" class="dc-evid-url">${escHtml(v.length>60?v.slice(0,57)+'…':v)}</a>
+            <button class="btn-vid-sm" onclick="openVideoUrl('${escAttr(v)}','${escAttr(d.name)}')">&#9654;</button>
+            <button class="btn-icon" onclick="removeExtraVideo('${tid}','${sd.uid}',${vi})">&#10005;</button>
+          </div>`).join('')}
+          <button class="dc-evid-add" onclick="addExtraVideo('${tid}','${sd.uid}')">&#65291; Add reference video</button>
+        </div>
+        ${d.video?`<div class="print-vid" style="display:none">&#9654; <a href="${d.video}" target="_blank">${d.video}</a></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Re-render just the drill list and update timeline/tab badges
+function rerenderDrillList(tid){
+  if(tid!==activeTab)return;
+  const el=document.getElementById('tcDrillList');
+  if(el)el.innerHTML=renderDrillList(tid);
+  // Update split footer when full squad changes (split time is auto-derived)
+  if(tid==='fs'&&!S.splitTime){
+    const sf=document.querySelector('.tc-split-footer');
+    if(sf){
+      const st=document.querySelector('.tc-split-time');const sa=document.querySelector('.tc-split-auto');const si=document.querySelector('.tc-split-inp');
+      const d=splitTimeDisplay();
+      if(st)st.textContent=d;if(sa)sa.style.display='';if(si)si.value=d;
+    }
+  }
+  // Update rotation-from banner if on a group tab
+  if(!isPostarget(tid)&&tid!=='fs'){
+    const rfTime=document.querySelector('.tc-rot-from-time');
+    if(rfTime){const rs=rotationStart();rfTime.textContent=rs!=null?fmtTime(rs):'—';}
+  }
+  renderTimeline();
+  renderTabBar();
+}
+
+function setSplitTime(val){
+  S.splitTime=val.trim();
+  // Re-render current tab content to update the banner
+  if(activeTab==='fs'){
+    const st=document.querySelector('.tc-split-time');const sa=document.querySelector('.tc-split-auto');const sr=document.querySelector('.tc-split-reset');
+    const d=splitTimeDisplay();
+    if(st)st.textContent=d;
+    if(sa){sa.style.display=S.splitTime?'none':'';}
+    if(sr){sr.style.display=S.splitTime?'':'none';}
+    if(!S.splitTime){const si=document.querySelector('.tc-split-inp');if(si)si.value=d;}
+  } else {
+    const rfTime=document.querySelector('.tc-rot-from-time');
+    if(rfTime){rfTime.textContent=splitTimeDisplay();}
+  }
+  renderTimeline();
+}
+
+// ── DRILL TIME CONTROL ─────────────────────────────────────────
+function promptDrillTime(tid,uid_){
+  const arr=getDrillsArray(tid);if(!arr)return;
+  const sd=arr.find(x=>x.uid===uid_);if(!sd)return;
+  const base=(tid==='fs'||isPostarget(tid))?(mainStart()!=null?mainStart():0):(rotationStart()!=null?rotationStart():mainStart()!=null?mainStart():0);
+  let running=base;
+  for(let i=0;i<arr.length;i++){if(arr[i].uid===uid_)break;running+=(parseInt(arr[i].dur)||20);}
+  const aT=fmtTime(running);
+  const val=prompt('Set start time (HH:MM):\nLeave blank to use auto-calculated time ('+aT+')',sd.start||aT);
+  if(val===null)return;
+  sd.start=val.trim();
+  rerenderDrillList(tid);
+}
+function clearDrillTime(tid,uid_){
+  const arr=getDrillsArray(tid);if(!arr)return;
+  const sd=arr.find(x=>x.uid===uid_);if(!sd)return;
+  sd.start='';
+  rerenderDrillList(tid);
+}
+
+// ── DRILL MANAGEMENT ───────────────────────────────────────────
+function makeSd(did,start,dur){return{uid:uid(),did,start:start||'',dur:dur||20,notes:'',focus:'',extraVideos:[]};}
+function addDrillToTarget(tid,drillId){
+  const arr=getDrillsArray(tid);if(!arr)return;
+  arr.push(makeSd(drillId,'',20));
+  setActiveTab(tid); // Jump to the target tab
+  toast('Drill added ✓','ok');
+}
+function removeDrillFromTarget(tid,u){
+  const arr=getDrillsArray(tid);if(!arr)return;
+  const i=arr.findIndex(d=>d.uid===u);if(i>=0)arr.splice(i,1);
+  rerenderDrillList(tid);
+}
+function moveDrillInTarget(tid,u,dir){
+  const arr=getDrillsArray(tid);if(!arr)return;
+  const i=arr.findIndex(d=>d.uid===u);if(i<0)return;
+  const ni=i+dir;if(ni<0||ni>=arr.length)return;
+  [arr[i],arr[ni]]=[arr[ni],arr[i]];
+  rerenderDrillList(tid);
+}
+let _durDebounce=null;
+function updateSDInTarget(tid,u,prop,val){
+  const arr=getDrillsArray(tid);if(!arr)return;
+  const sd=arr.find(x=>x.uid===u);if(!sd)return;
+  sd[prop]=prop==='dur'?parseInt(val)||20:val;
+  if(prop==='dur'){
+    // Immediate: update only the timeline bar (cheap, no DOM rebuild)
+    renderTimeline();
+    // Debounced: cascade auto start times once typing pauses (surgical text-node update, no re-render)
+    clearTimeout(_durDebounce);
+    _durDebounce=setTimeout(()=>cascadeStartTimes(tid),320);
+  }
+}
+
+// Update start-time text nodes in place — no innerHTML replacement, no focus loss
+function cascadeStartTimes(tid){
+  const arr=getDrillsArray(tid)||[];
+  const base=(tid==='fs'||isPostarget(tid))
+    ?(mainStart()!=null?mainStart():0)
+    :(rotationStart()!=null?rotationStart():mainStart()!=null?mainStart():0);
+  let running=base;
+  for(const sd of arr){
+    const autoT=fmtTime(running);
+    running+=parseInt(sd.dur)||20;
+    if(sd.start)continue; // manually set — leave alone
+    const card=document.querySelector(`.drill-card[data-uid="${sd.uid}"]`);
+    if(!card)continue;
+    const timeEl=card.querySelector('.dc-time');
+    if(!timeEl)continue;
+    // Update only the text node (first child), leaves reset button intact
+    const tn=[...timeEl.childNodes].find(n=>n.nodeType===3);
+    if(tn)tn.nodeValue=autoT;
+  }
+  // Update derived time displays
+  if(tid==='fs'&&!S.splitTime){
+    const d=splitTimeDisplay();
+    const st=document.querySelector('.tc-split-time');if(st)st.textContent=d;
+    const si=document.querySelector('.tc-split-inp');if(si)si.value=d;
+  }
+  if(!isPostarget(tid)&&tid!=='fs'){
+    const rfTime=document.querySelector('.tc-rot-from-time');
+    if(rfTime){const rs=rotationStart();rfTime.textContent=rs!=null?fmtTime(rs):'—';}
+  }
+}
+function addExtraVideo(tid,u){
+  const url=prompt('Enter video URL (YouTube, Google Drive, Instagram):');
+  if(!url||!url.trim())return;
+  const arr=getDrillsArray(tid);if(!arr)return;
+  const sd=arr.find(x=>x.uid===u);if(!sd)return;
+  if(!sd.extraVideos)sd.extraVideos=[];
+  sd.extraVideos.push(url.trim());
+  rerenderDrillList(tid);
+}
+function removeExtraVideo(tid,u,idx){
+  const arr=getDrillsArray(tid);if(!arr)return;
+  const sd=arr.find(x=>x.uid===u);if(!sd)return;
+  sd.extraVideos.splice(idx,1);
+  rerenderDrillList(tid);
+}
+
+// ── PICKER ─────────────────────────────────────────────────────
+function openPicker(tid){
+  pickerTarget=tid||S.groups[0].id;
+  renderPickerTargetBtns();renderPickerCats('');
+  document.getElementById('drillSearch').value='';
+  openModal('pickerBackdrop');
+}
+function renderPickerTargetBtns(){
+  const el=document.getElementById('pickerTargets');
+  let html=S.groups.map(g=>{
+    const hex=GROUP_COLOR_HEX[g.color]||'#2464B0';
+    return `<button class="pt-btn ${pickerTarget===g.id?'active':''}" onclick="setPickerTarget('${g.id}')"><span class="pt-btn-dot" style="background:${hex}"></span>${escHtml(g.name)}</button>`;
+  }).join('');
+  if(S.posSplits&&S.posSplits.enabled){
+    html+='<span class="pt-sep">Positions</span>';
+    html+=S.posSplits.positions.map(pos=>{
+      const hex=GROUP_COLOR_HEX[pos.color]||'#2464B0';
+      return `<button class="pt-btn ${pickerTarget===pos.id?'active':''}" onclick="setPickerTarget('${pos.id}')"><span class="pt-btn-dot" style="background:${hex}"></span>${escHtml(pos.name)}</button>`;
+    }).join('');
+  }
+  el.innerHTML=html;
+}
+function setPickerTarget(tid){pickerTarget=tid;renderPickerTargetBtns();}
+function filterDrills(){renderPickerCats(document.getElementById('drillSearch').value.toLowerCase().trim());}
+function renderPickerCats(filter){
+  const CATS=['Hitting','Infield','Outfield','Pitching','Catching','Custom'],all=lib(),isF=!!filter;
+  document.getElementById('pickerCats').innerHTML=CATS.map(cat=>{
+    const drills=all.filter(d=>d.cat===cat&&(!filter||d.name.toLowerCase().includes(filter)));
+    if(!drills.length)return '';
+    return `<div class="picker-cat"><div class="cat-hd ${isF?'open':''}" onclick="toggleCat(this)"><span class="cat-arrow">&#9658;</span><span class="cat-hd-name"><span class="cat-badge cat-${cat}">${cat}</span></span><span class="cat-count">${drills.length}</span></div>
+      <div class="cat-drills-list ${isF?'open':''}">${drills.map(d=>`<div class="picker-drill"><span class="picker-drill-name">${escHtml(d.name)}</span><div class="picker-drill-acts">${d.video?`<button class="btn-vid-sm" onclick="openVideoModal('${d.id}')">&#9654;</button>`:''}<button class="btn-add-sm" onclick="addDrillToTarget(pickerTarget,'${d.id}')">&#65291; Add</button></div></div>`).join('')}</div></div>`;
+  }).join('');
+}
+function toggleCat(hd){hd.classList.toggle('open');hd.nextElementSibling.classList.toggle('open');}
+
+// ── ROTATION BUILDER ───────────────────────────────────────────
+function openRotationBuilder(){
+  if(S.groups.length<2){toast('Add at least 2 groups first','err');return;}
+  if(_rbStations.length===0)_rbStations=new Array(S.groups.length).fill('');
+  renderRbStations();renderRbPreview();
+  openModal('rotationBackdrop');
+}
+function renderRbStations(){
+  const opthtml=['Hitting','Infield','Outfield','Pitching','Catching','Custom'].map(cat=>{
+    const ds=lib().filter(d=>d.cat===cat);
+    return ds.length?`<optgroup label="${cat}">${ds.map(d=>`<option value="${d.id}">${escHtml(d.name)}</option>`).join('')}</optgroup>`:'';
+  }).join('');
+  document.getElementById('rbStationsList').innerHTML=
+    _rbStations.map((did,i)=>`<div class="rb-station-row">
+      <span class="rb-station-num">${i+1}</span>
+      <select class="rb-station-sel" id="rbSel-${i}" onchange="_rbStations[${i}]=this.value;renderRbPreview()">
+        <option value="">— Select drill —</option>${opthtml}
+      </select>
+      ${_rbStations.length>1?`<button class="btn-icon" onclick="removeRbStation(${i})">&#10005;</button>`:''}
+    </div>`).join('')+
+    '<button class="rb-add-btn" onclick="addRbStation()">&#65291; Add Station</button>';
+  _rbStations.forEach((did,i)=>{const el=document.getElementById('rbSel-'+i);if(el&&did)el.value=did;});
+}
+function addRbStation(){if(_rbStations.length>=8){toast('Max 8 stations','err');return;}_rbStations.push('');renderRbStations();renderRbPreview();}
+function removeRbStation(i){_rbStations.splice(i,1);renderRbStations();renderRbPreview();}
+function renderRbPreview(){
+  const stations=_rbStations.map((_,i)=>{const el=document.getElementById('rbSel-'+i);return el?el.value:'';});
+  const dur=parseInt(document.getElementById('rbSlotDur').value)||25;
+  const startVal=document.getElementById('rbStartTime').value||'11:30';
+  const roundsIn=document.getElementById('rbRounds').value;
+  const rounds=roundsIn?parseInt(roundsIn):S.groups.length;
+  const startMin=parseMin(startVal),nSt=stations.length;
+  if(!stations.some(Boolean)){document.getElementById('rbPreview').innerHTML='<div class="rb-empty">Select stations above to preview the schedule.</div>';return;}
+  let html=`<table class="rb-table"><thead><tr><th>Time</th>${S.groups.map(g=>`<th>${escHtml(g.name)}</th>`).join('')}</tr></thead><tbody>`;
+  for(let r=0;r<rounds;r++){
+    html+=`<tr><td class="rb-time">${fmtTime(startMin+r*dur)}</td>`;
+    S.groups.forEach((_,gi)=>{const did=stations[(gi+r)%nSt],d=did?getDrill(did):null;html+=`<td class="rb-cell">${d?escHtml(d.name):'<span style="color:var(--text-3)">—</span>'}</td>`;});
+    html+='</tr>';
+  }
+  document.getElementById('rbPreview').innerHTML=html+'</tbody></table>';
+}
+function buildRotation(){
+  const stations=_rbStations.map((_,i)=>{const el=document.getElementById('rbSel-'+i);return el?el.value:'';});
+  if(!stations.some(Boolean)){toast('Select at least one drill station','err');return;}
+  if(Object.values(S.drills).some(a=>a.length>0)&&!confirm('This will replace all existing group drills. Continue?'))return;
+  const dur=parseInt(document.getElementById('rbSlotDur').value)||25;
+  const startVal=document.getElementById('rbStartTime').value||'11:30';
+  const roundsIn=document.getElementById('rbRounds').value;
+  const rounds=roundsIn?parseInt(roundsIn):S.groups.length;
+  const startMin=parseMin(startVal),nSt=stations.length;
+  S.groups.forEach((g,gi)=>{
+    S.drills[g.id]=[];
+    for(let r=0;r<rounds;r++){const did=stations[(gi+r)%nSt];if(!did)continue;S.drills[g.id].push(makeSd(did,fmtTime(startMin+r*dur),dur));}
+  });
+  closeModal('rotationBackdrop');
+  renderAll();
+  toast('Rotation built — '+rounds+' rounds ✓','ok');
+}
+
+// ── DRILL EDITOR ───────────────────────────────────────────────
+function openDrillEditor(id){
+  document.getElementById('editorTitle').textContent=id?'Edit Drill':'Add Custom Drill';
+  document.getElementById('edId').value=id||'';
+  document.getElementById('edVPreview').style.display='none';
+  if(id){const d=S.custom.find(x=>x.id===id);if(d){document.getElementById('edName').value=d.name;document.getElementById('edCat').value=d.cat;document.getElementById('edDesc').value=d.desc||'';document.getElementById('edVideo').value=d.video||'';liveVideoPreview('edVideo','edVPreview','edVBadge','edVText');}}
+  else{['edName','edDesc','edVideo'].forEach(id=>document.getElementById(id).value='');document.getElementById('edCat').value='Custom';}
+  openModal('editorBackdrop');
+}
+function saveDrill(){
+  const name=document.getElementById('edName').value.trim();if(!name){toast('Enter a drill name','err');return;}
+  const cat=document.getElementById('edCat').value,desc=document.getElementById('edDesc').value.trim(),video=document.getElementById('edVideo').value.trim(),id=document.getElementById('edId').value;
+  if(id){const idx=S.custom.findIndex(d=>d.id===id);if(idx>=0)S.custom[idx]={...S.custom[idx],name,cat,desc,video};}
+  else S.custom.push({id:'C'+Date.now(),name,cat,desc,video,bi:false});
+  closeModal('editorBackdrop');renderPickerCats(document.getElementById('drillSearch').value.toLowerCase());renderMgrTable();
+  toast(id?'Drill updated ✓':'Drill added ✓','ok');
+}
+
+// ── DRILL MANAGER ──────────────────────────────────────────────
+function renderMgrTable(){
+  const all=lib();document.getElementById('mgrCount').textContent=all.length+' drills';
+  document.getElementById('mgrTableWrap').innerHTML='<table class="mgr-table"><thead><tr><th style="width:80px">ID</th><th>Name</th><th style="width:90px">Category</th><th style="width:140px">Video</th><th style="width:80px">Actions</th></tr></thead><tbody>'+
+    all.map(d=>`<tr><td style="font-family:monospace;font-size:10.5px;color:var(--text-3)">${d.id}</td><td>${escHtml(d.name)}${d.bi?'<span class="builtin-pill">built-in</span>':''}</td><td><span class="cat-badge cat-${d.cat}">${d.cat}</span></td><td>${d.video?`<button class="btn-vid-sm" onclick="openVideoModal('${d.id}')">&#9654; ${videoTypeName(d.video)}</button>`:'<span style="font-size:11px;color:var(--text-3)">None</span>'}</td><td style="display:flex;gap:3px"><button class="btn-icon" onclick="${d.bi?`editBuiltinVideo('${d.id}')` :`openDrillEditor('${d.id}')`}">${d.bi?'🎬':'✏️'}</button>${!d.bi?`<button class="btn-icon" onclick="deleteCustom('${d.id}')">🗑</button>`:''}</td></tr>`).join('')+
+  '</tbody></table>';
+}
+function editBuiltinVideo(id){const d=getDrill(id),cur=S.overrides[id]||'',url=prompt('Video URL for "'+d.name+'":\n\nYouTube, Instagram, or Google Drive. Blank to remove.',cur);if(url===null)return;if(url.trim())S.overrides[id]=url.trim();else delete S.overrides[id];renderMgrTable();toast('Video updated ✓','ok');}
+function deleteCustom(id){if(!confirm('Delete this custom drill?'))return;S.custom=S.custom.filter(d=>d.id!==id);renderMgrTable();renderPickerCats(document.getElementById('drillSearch').value.toLowerCase());toast('Drill deleted','ok');}
+function importCSV(){const inp=document.createElement('input');inp.type='file';inp.accept='.csv';inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const lines=ev.target.result.split('\n').filter(l=>l.trim());let n=0;lines.slice(1).forEach(line=>{const p=line.split(',').map(x=>x.trim().replace(/^"|"$/g,''));if(p[0]){S.custom.push({id:'C'+Date.now()+n,name:p[0],cat:p[1]||'Custom',desc:p[2]||'',video:p[3]||'',bi:false});n++;}});renderMgrTable();renderPickerCats('');toast(n+' drills imported ✓','ok');};r.readAsText(f);};inp.click();}
+
+// ── MODALS ─────────────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');if(id==='mgrBackdrop')renderMgrTable();}
+function closeModal(id){document.getElementById(id).classList.remove('open');if(id==='videoBackdrop')document.getElementById('videoWrap').innerHTML='';}
+function backdropClose(e,id){if(e.target.id===id)closeModal(id);}
+
+// ── SAVE / LOAD ────────────────────────────────────────────────
+function captureInputs(){
+  S.title=document.getElementById('sessionTitle').textContent.trim();
+  S.date=document.getElementById('sessionDate').value;
+  S.startTime=document.getElementById('sessionStart').value;
+  S.warmupDur=parseInt(document.getElementById('warmupDuration').value)||20;
+  S.warmupNotes=document.getElementById('warmupNotes').value;
+  S.sessionNotes=document.getElementById('sessionNotes').value;
+  S.location=document.getElementById('locationName').value.trim();
+  S.locationMapsUrl=document.getElementById('locationMapsUrl').value.trim();
+  S.firebaseUrl=(document.getElementById('firebaseUrl').value||'').trim().replace(/\/$/,'');
+  S.absentPlayers=document.getElementById('absentPlayers').value;
+  S.preSession.time=document.getElementById('preSessionTime').value;
+  S.preSession.notes=document.getElementById('preSessionNotes').value;
+  const slCapEl=document.getElementById('sessionLength');if(slCapEl)S.sessionLength=parseInt(slCapEl.value)||180;
+  document.querySelectorAll('.group-item').forEach(el=>{
+    const g=S.groups.find(x=>x.id===el.dataset.gid),ta=el.querySelector('.group-players-inp');
+    if(g&&ta)g.players=ta.value;
+  });
+}
+function saveSession(){captureInputs();localStorage.setItem('nt_v1',JSON.stringify(S));toast('Session saved ✓','ok');}
+function loadFromStorage(){
+  try{const raw=localStorage.getItem('nt_v1');if(raw){const sv=JSON.parse(raw);if(NT_FIREBASE_URL&&!sv.firebaseUrl)sv.firebaseUrl=NT_FIREBASE_URL;Object.assign(S,sv);if(!S.drills)S.drills={};if(!S.drills.fs)S.drills.fs=[];if(S.splitTime===undefined)S.splitTime='';}}catch(e){}
+}
+
+// ── SESSIONS MODAL ─────────────────────────────────────────────
+let _cachedSessions=null;
+async function openSessionsModal(){
+  openModal('sessionsBackdrop');
+  document.getElementById('sessionsListBody').innerHTML='<div class="sess-empty">Loading…</div>';
+  document.getElementById('sessCount').textContent='';
+  if(!S.firebaseUrl){document.getElementById('sessionsListBody').innerHTML='<div class="sess-empty">No Firebase URL configured.</div>';return;}
+  try{const res=await fetch(S.firebaseUrl+'/nt/sessions.json');if(!res.ok)throw new Error(res.status);const data=await res.json();if(!data){document.getElementById('sessionsListBody').innerHTML='<div class="sess-empty">No saved sessions found.</div>';return;}_cachedSessions=data;renderSessionsList('');}
+  catch(e){document.getElementById('sessionsListBody').innerHTML='<div class="sess-empty">Could not load sessions. Check Firebase URL and rules.</div>';}
+}
+function renderSessionsList(filter){
+  if(!_cachedSessions)return;
+  const f=(filter||'').toLowerCase();
+  const entries=Object.entries(_cachedSessions).sort((a,b)=>b[0].localeCompare(a[0])).filter(([k,s])=>!f||k.includes(f)||(s.title||'').toLowerCase().includes(f));
+  document.getElementById('sessCount').textContent=entries.length+' session'+(entries.length!==1?'s':'');
+  if(!entries.length){document.getElementById('sessionsListBody').innerHTML='<div class="sess-empty">No sessions match.</div>';return;}
+  document.getElementById('sessionsListBody').innerHTML=entries.map(([key,sess])=>`<div class="sess-item" onclick="loadSession('${escAttr(key)}')"><span class="sess-item-date">${key}</span><span class="sess-item-title">${escHtml(sess.title||'Untitled')}</span><button class="btn-icon" style="flex-shrink:0" onclick="event.stopPropagation();deleteSession('${escAttr(key)}')">🗑</button></div>`).join('');
+}
+async function loadSession(key){if(!_cachedSessions||!_cachedSessions[key])return;Object.assign(S,_cachedSessions[key]);if(S.groups&&S.groups.length)activeTab=S.groups[0].id;_loadedSessionKey=key;closeModal('sessionsBackdrop');renderAll();toast('Session loaded ✓','ok');}
+async function deleteSession(key){if(!confirm('Delete "'+key+'"?'))return;try{await fetch(S.firebaseUrl+'/nt/sessions/'+key+'.json',{method:'DELETE'});if(_cachedSessions)delete _cachedSessions[key];renderSessionsList(document.getElementById('sessSearch').value);toast('Session deleted','ok');}catch(e){toast('Delete failed','err');}}
+
+// ── FIREBASE ───────────────────────────────────────────────────
+function fbStatusUpdate(){const el=document.getElementById('fbStatus'),txt=document.getElementById('fbStatusTxt');if(!el)return;if(S.firebaseUrl){el.className='fb-status connected';txt.textContent='Connected';}else{el.className='fb-status idle';txt.textContent='Not connected';}}
+function toggleFbHint(){const h=document.getElementById('fbHint');h.style.display=h.style.display==='none'?'block':'none';}
+async function fbPollForChanges(){if(!S.firebaseUrl||!_loadedSessionKey)return;try{const res=await fetch(S.firebaseUrl+'/nt/sessions/'+_loadedSessionKey+'.json');if(!res.ok)return;const data=await res.json();if(!data)return;const hash=JSON.stringify(data);if(_lastPublishedHash&&hash!==_lastPublishedHash)document.getElementById('updateBanner').classList.add('show');}catch(e){}}
+function fbStartPolling(){if(_fbPollTimer)clearInterval(_fbPollTimer);if(!S.firebaseUrl)return;_fbPollTimer=setInterval(fbPollForChanges,30000);window.addEventListener('focus',fbPollForChanges,{once:false});}
+
+// ── PUBLISH + SHARE ────────────────────────────────────────────
+function sessionPayload(){captureInputs();return{title:S.title,date:S.date,startTime:S.startTime,sessionLength:S.sessionLength||180,splitTime:S.splitTime||'',location:S.location,locationMapsUrl:S.locationMapsUrl,preSession:S.preSession,absentPlayers:S.absentPlayers,warmupDur:S.warmupDur,warmupNotes:S.warmupNotes,sessionNotes:S.sessionNotes,fullSquadDrills:S.drills.fs||[],posSplits:S.posSplits,groups:S.groups,drills:S.drills,custom:S.custom,overrides:S.overrides,firebaseUrl:S.firebaseUrl};}
+async function publishSession(){
+  captureInputs();
+  if(!S.firebaseUrl){toast('Set a Firebase URL first','err');return;}
+  const date=S.date||new Date().toISOString().slice(0,10),payload=sessionPayload();
+  const btn=document.querySelector('[onclick="publishSession()"]');if(btn){btn.textContent='Publishing…';btn.disabled=true;}
+  try{const res=await fetch(S.firebaseUrl+'/nt/sessions/'+date+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});if(!res.ok)throw new Error(res.status);_loadedSessionKey=date;_lastPublishedHash=JSON.stringify(payload);toast('Session published ✓','ok');openShareModal();}
+  catch(e){toast('Publish failed — check Firebase URL and rules','err');}
+  finally{if(btn){btn.innerHTML='&#9654; Publish';btn.disabled=false;}}
+}
+function stableShareUrl(){const base=APP_BASE_URL||window.location.href.split('#')[0];return base+'#live='+(S.date||new Date().toISOString().slice(0,10));}
+function legacyShareUrl(){const base=APP_BASE_URL||window.location.href.split('#')[0];return base+'#s='+LZString.compressToEncodedURIComponent(JSON.stringify(sessionPayload()));}
+function openShareModal(){
+  captureInputs();
+  const hasFb=!!S.firebaseUrl,url=hasFb?stableShareUrl():legacyShareUrl();
+  document.getElementById('shareModalTitle').textContent=hasFb?'Session Link':'Snapshot Link';
+  document.getElementById('shareModalBody').innerHTML=hasFb
+    ?'<p style="font-size:12.5px;color:var(--text-2);margin-bottom:12px">Permanent link &mdash; updates every time you <strong style="color:var(--pri)">Publish</strong>.</p><div class="share-url-box" id="shareUrlBox">'+escHtml(url)+'</div><p class="share-note" style="margin-top:10px">Includes drill schedules, focus notes, and reference videos.</p>'
+    :'<p style="font-size:12.5px;color:var(--text-2);margin-bottom:12px">No Firebase configured &mdash; one-time snapshot in the URL.</p><div class="share-url-box" id="shareUrlBox" style="font-size:10px">'+escHtml(url)+'</div>';
+  openModal('shareBackdrop');
+}
+function copyShareLink(){const box=document.getElementById('shareUrlBox'),url=box?box.textContent.trim():'';navigator.clipboard.writeText(url).then(()=>{const btn=document.getElementById('copyLinkBtn');btn.textContent='✓ Copied!';setTimeout(()=>{btn.innerHTML='&#128203; Copy Link';},2000);}).catch(()=>{if(box){const r=document.createRange();r.selectNodeContents(box);window.getSelection().removeAllRanges();window.getSelection().addRange(r);}toast('Press Ctrl+C / Cmd+C to copy','ok');});}
+
+// ── DOWNLOAD APP ───────────────────────────────────────────────
+function downloadApp(){
+  captureInputs();
+  let html=document.documentElement.outerHTML;
+  html=html.replace(/const CUSTOM_DRILLS=\[\];/,'const CUSTOM_DRILLS='+JSON.stringify(S.custom,null,2)+';')
+           .replace(/const VIDEO_OVERRIDES=\{\};/,'const VIDEO_OVERRIDES='+JSON.stringify(S.overrides,null,2)+';')
+           .replace(/const NT_FIREBASE_URL='';/,"const NT_FIREBASE_URL='"+S.firebaseUrl.replace(/'/g,"\\'")+"';")
+           .replace(/const APP_BASE_URL='';/,"const APP_BASE_URL='"+(APP_BASE_URL||'').replace(/'/g,"\\'")+"';");
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='NT_Session_Builder_V1.html';a.click();
+  toast('Updated app downloaded ✓','ok');
+}
+
+// ── PRINT ──────────────────────────────────────────────────────
+function doPrint(){captureInputs();document.querySelectorAll('.print-vid').forEach(b=>b.style.display='flex');window.print();}
+
+// ── READ-ONLY ──────────────────────────────────────────────────
+async function tryReadOnlyMode(){
+  const hash=window.location.hash;
+  if(hash.startsWith('#live=')){
+    const date=hash.slice(6);
+    document.getElementById('app').style.display='none';
+    document.getElementById('readOnlyView').style.display='block';
+    document.getElementById('readOnlyView').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:14px;color:var(--text-2)"><span class="logo-badge" style="font-size:14px;padding:5px 12px">NT</span><span style="font-size:14px">Loading session…</span></div>';
+    if(!NT_FIREBASE_URL){document.getElementById('readOnlyView').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:12px;color:var(--text-2);text-align:center;padding:20px"><span class="logo-badge" style="font-size:14px;padding:5px 12px">NT</span><span style="font-size:15px;color:var(--text)">App not configured</span><span>Ask the admin to republish the app.</span></div>';return true;}
+    try{
+      const res=await fetch(NT_FIREBASE_URL+'/nt/sessions/'+date+'.json');
+      if(!res.ok)throw new Error(res.status);
+      const data=await res.json();if(!data)throw new Error('empty');
+      document.getElementById('readOnlyView').innerHTML='<div class="ro-wrap" id="roWrap"></div>';
+      renderReadOnly(data);
+    }catch(e){document.getElementById('readOnlyView').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:10px;color:var(--text-2);text-align:center;padding:20px"><span class="logo-badge" style="font-size:14px;padding:5px 12px">NT</span><span style="font-size:15px;color:var(--text)">Session not found</span><span>No session found for <strong>'+escHtml(date)+'</strong>.</span></div>';}
+    return true;
+  }
+  if(hash.startsWith('#s=')){
+    try{const data=JSON.parse(LZString.decompressFromEncodedURIComponent(hash.slice(3)));document.getElementById('app').style.display='none';document.getElementById('readOnlyView').style.display='block';document.getElementById('readOnlyView').innerHTML='<div class="ro-wrap" id="roWrap"></div>';renderReadOnly(data);return true;}catch(e){return false;}
+  }
+  return false;
+}
+
+function renderReadOnly(data){
+  const wrap=document.getElementById('roWrap');if(!wrap)return;
+  const groups=data.groups||[{id:'g1',name:'Group A',color:'blue',players:''}];
+  const drills=data.drills||{},ps=data.posSplits;
+  const fsDrills=data.fullSquadDrills||(drills.fs)||[];
+  const ms=(()=>{const s=parseMin(data.startTime);return s==null?null:s+(parseInt(data.warmupDur)||20);})();
+  // Compute rotation start: manual splitTime, or auto end of full squad
+  const splitT=(()=>{if(data.splitTime)return data.splitTime;if(ms==null)return null;const e=ms+totalDur(fsDrills);return e!=ms?fmtTime(e):null;})();
+  const rotMs=splitT?parseMin(splitT):ms;
+  const locHtml=(()=>{const n=data.location||'',u=data.locationMapsUrl||'';if(!n&&!u)return '';const href=u||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(n);return `<div class="ro-location"><span class="ro-loc-label">&#128205;</span><span class="ro-loc-name">${escHtml(n)}</span><a href="${escHtml(href)}" target="_blank" rel="noopener" class="ro-loc-link">Open in Maps &#8599;</a></div>`;})();
+
+  function roCard(sd,i,arr,clockBase){
+    const d=lib().find(x=>x.id===sd.did);if(!d)return '';
+    let runMs=clockBase!=null?clockBase:0;
+    for(let j=0;j<i;j++)runMs+=(parseInt(arr[j].dur)||20);
+    const autoT=fmtTime(runMs);
+    const dispTime=sd.start||autoT;
+    const evids=sd.extraVideos||[];
+    const vlinks=[d.video?`<a href="javascript:void(0)" class="ro-video-link" onclick="roOpenVideo('${escAttr(d.video)}','${escAttr(d.name)}')">&#9654; ${videoTypeName(d.video)}</a>`:''];
+    evids.forEach((v,vi)=>vlinks.push(`<a href="javascript:void(0)" class="ro-video-link ro-ref-link" onclick="roOpenVideo('${escAttr(v)}','${escAttr(d.name)}')">&#9654; Ref ${vi+1}</a>`));
+    return `<div class="ro-drill">
+      <div class="ro-drill-top"><span class="ro-drill-time">${dispTime}</span><span class="ro-drill-name">${escHtml(d.name)}</span><span class="ro-drill-dur">${sd.dur||20} min</span></div>
+      <div class="ro-drill-meta"><span class="cat-badge cat-${d.cat}">${d.cat}</span>${vlinks.filter(Boolean).join('')}</div>
+      ${sd.focus?`<div class="ro-drill-focus">${escHtml(sd.focus)}</div>`:''}
+    </div>`;
+  }
+
+  wrap.innerHTML=`
+    <div class="ro-header">
+      <span class="ro-logo">NT</span>
+      <div style="flex:1">
+        <div class="ro-title">${escHtml(data.title||'National Team Training Session')}</div>
+        <div class="ro-meta">
+          ${data.date?`<div class="ro-meta-item">&#128197; <span>${data.date}</span></div>`:''}
+          ${data.startTime?`<div class="ro-meta-item">&#128336; <span>${data.startTime}</span></div>`:''}
+        </div>${locHtml}
+      </div>
+    </div>
+    ${(data.preSession&&(data.preSession.time||data.preSession.notes))?`<div class="ro-section"><div class="ro-section-title">Pre-Session</div><div class="ro-block">${data.preSession.time?`<div class="ro-block-label">Coach Meeting &mdash; ${data.preSession.time}</div>`:''}${data.preSession.notes?`<div class="ro-block-text">${escHtml(data.preSession.notes)}</div>`:''}</div></div>`:''}
+    ${(data.warmupDur||data.warmupNotes)?`<div class="ro-section"><div class="ro-section-title">Warmup</div><div class="ro-block"><div class="ro-warmup-dur">&#9201; ${data.warmupDur||20} minutes</div>${data.warmupNotes?`<div class="ro-block-text">${escHtml(data.warmupNotes)}</div>`:''}</div></div>`:''}
+    ${(ps&&ps.enabled&&ps.positions&&ps.positions.some(p=>(p.drills||[]).length>0))?`<div class="ro-section"><div class="ro-section-title">Position Work</div><div class="ro-groups">${ps.positions.filter(pos=>(pos.drills||[]).length>0).map(pos=>{const hex=GROUP_COLOR_HEX[pos.color]||'#2464B0';return `<div class="ro-group gc-${pos.color}" style="--gc:${hex}"><div class="ro-group-hd"><div class="ro-group-dot"></div><span class="ro-group-name">${escHtml(pos.name)}</span></div>${pos.drills.map((sd,i)=>roCard(sd,i,pos.drills,ms)).join('')}</div>`;}).join('')}</div></div>`:'' }
+    ${(fsDrills&&fsDrills.length)?`<div class="ro-section">
+      <div class="ro-section-title">Full Squad</div>
+      <div style="display:flex;flex-direction:column;gap:6px">${fsDrills.map((sd,i)=>roCard(sd,i,fsDrills,ms)).join('')}</div>
+      ${splitT?`<div style="display:flex;align-items:center;gap:10px;margin-top:10px;padding:8px 12px;background:rgba(63,185,80,.07);border:1px solid rgba(63,185,80,.2);border-radius:var(--r)"><span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green)">&#9670; Groups split at ${escHtml(splitT)}</span></div>`:''}
+    </div>`:''}
+    <div class="ro-section"><div class="ro-section-title">Group Rotation</div><div class="ro-groups">${groups.map(g=>{
+      const hex=GROUP_COLOR_HEX[g.color]||'#2464B0',gd=drills[g.id]||[];
+      const players=(g.players||'').split(/[\n,]+/).map(p=>p.trim()).filter(Boolean);
+      return `<div class="ro-group gc-${g.color}" style="--gc:${hex}">
+        <div class="ro-group-hd"><div class="ro-group-dot"></div><span class="ro-group-name">${escHtml(g.name)}</span></div>
+        ${players.length?`<div class="ro-group-players"><div class="ro-group-players-title">Players</div>${players.map(p=>`<span style="display:inline-block;background:var(--bg-raised);border:1px solid var(--border);border-radius:3px;padding:1px 7px;margin:2px;font-size:12px">${escHtml(p)}</span>`).join('')}</div>`:''}
+        ${gd.length?gd.map((sd,i)=>roCard(sd,i,gd,rotMs)).join(''):'<div class="ro-empty">No drills scheduled.</div>'}
+      </div>`;
+    }).join('')}</div></div>
+    ${data.absentPlayers?`<div class="ro-section"><div class="ro-section-title">Absences</div><div class="ro-absent"><div class="ro-absent-label">Absent / Unavailable</div>${escHtml(data.absentPlayers)}</div></div>`:''}
+    ${data.sessionNotes?`<div class="ro-section"><div class="ro-section-title">Notes</div><div class="ro-notes-box">${escHtml(data.sessionNotes)}</div></div>`:''}
+  `;
+}
+
+function roOpenVideo(url,name){
+  document.getElementById('roVideoTitle').textContent=name;
+  const c=document.getElementById('roVideoContent'),t=videoType(url),eu=embedUrl(url);
+  if(t==='youtube'||t==='gdrive')c.innerHTML='<iframe src="'+eu+'" allowfullscreen allow="autoplay;fullscreen" style="width:100%;aspect-ratio:16/9;border:none;display:block"></iframe>';
+  else if(t==='instagram')c.innerHTML='<div class="ro-video-ig"><p>Instagram can\'t be embedded.</p><a href="'+escHtml(url)+'" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-flex;margin-top:4px">Open on Instagram &#8599;</a></div>';
+  else c.innerHTML='<div class="ro-video-ig"><a href="'+escHtml(url)+'" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-flex">Open Video &#8599;</a></div>';
+  document.getElementById('roVideoModal').classList.add('open');
+}
+function roCloseVideo(){document.getElementById('roVideoModal').classList.remove('open');document.getElementById('roVideoContent').innerHTML='';}
+
+// ── UTILITIES ──────────────────────────────────────────────────
+function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(str){return String(str).replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function toast(msg,type=''){const el=document.createElement('div');el.className='toast '+type;el.textContent=msg;document.getElementById('toastRack').appendChild(el);setTimeout(()=>el.remove(),2700);}
+function tick(){const el=document.getElementById('liveClock');if(el)el.textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
+setInterval(tick,1000);tick();
+
+// ── EVENTS ─────────────────────────────────────────────────────
+document.getElementById('sessionDate').addEventListener('change',e=>{S.date=e.target.value;});
+document.getElementById('sessionStart').addEventListener('change',e=>{S.startTime=e.target.value;updateSessionEndTime();if(!isPostarget(activeTab))rerenderDrillList(activeTab);});
+document.getElementById('warmupDuration').addEventListener('input',e=>{S.warmupDur=parseInt(e.target.value)||20;updateSessionEndTime();if(!isPostarget(activeTab))rerenderDrillList(activeTab);});
+document.getElementById('sessionLength') && document.getElementById('sessionLength').addEventListener('input',e=>{S.sessionLength=parseInt(e.target.value)||180;updateSessionEndTime();renderTimeline();});
+document.getElementById('warmupNotes').addEventListener('input',e=>{S.warmupNotes=e.target.value;});
+document.getElementById('sessionNotes').addEventListener('input',e=>{S.sessionNotes=e.target.value;});
+document.getElementById('sessionTitle').addEventListener('input',e=>{S.title=e.target.textContent;});
+document.getElementById('rbSlotDur').addEventListener('input',renderRbPreview);
+document.getElementById('rbStartTime').addEventListener('input',renderRbPreview);
+document.getElementById('rbRounds').addEventListener('input',renderRbPreview);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['pickerBackdrop','videoBackdrop','editorBackdrop','mgrBackdrop','shareBackdrop','sessionsBackdrop','rotationBackdrop'].forEach(closeModal);roCloseVideo();}});
+
+// ── INIT ───────────────────────────────────────────────────────
+(async function init(){
+  if(await tryReadOnlyMode())return;
+  S.date=new Date().toISOString().slice(0,10);
+  loadFromStorage();
+  if(NT_FIREBASE_URL&&!S.firebaseUrl)S.firebaseUrl=NT_FIREBASE_URL;
+  if(S.groups&&S.groups.length)activeTab=activeTab||'fs';
+  renderAll();renderPickerCats('');
+  if(S.firebaseUrl)fbStartPolling();
+  setInterval(()=>{captureInputs();localStorage.setItem('nt_v1',JSON.stringify(S));},60000);
+})();
+</script>
+</body>
+</html>
