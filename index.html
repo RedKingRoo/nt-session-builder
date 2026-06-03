@@ -1680,7 +1680,7 @@ function renderTabContent(){
         <div class="tc-hd-row">
           <span class="tab-fs-icon" style="font-size:16px">&#9670;</span>
           <span class="tc-name">Full Squad</span>
-          <span style="font-size:11px;color:var(--text-3);background:var(--bg-raised);padding:2px 9px;border-radius:6px;margin-left:4px">${used} min</span>
+          <span id="fsTotalDur" style="font-size:11px;color:var(--text-3);background:var(--bg-raised);padding:2px 9px;border-radius:6px;margin-left:4px">${used} min</span>
           <button class="btn btn-ghost no-print" style="margin-left:auto;font-size:12px" onclick="openPicker('fs')">&#65291; Add Drill</button>
         </div>
       </div>
@@ -1928,8 +1928,19 @@ function updateSDInTarget(tid,u,prop,val){
   const sd=arr.find(x=>x.uid===u);if(!sd)return;
   sd[prop]=prop==='dur'?parseInt(val)||20:val;
   if(prop==='dur'){
-    // Immediate: update only the timeline bar (cheap, no DOM rebuild)
+    // Immediate: timeline bar + split time display + FS total
     renderTimeline();
+    if(tid==='fs'){
+      const d=splitTimeDisplay();
+      const st=document.querySelector('.tc-split-time');if(st)st.textContent=d;
+      const si=document.querySelector('.tc-split-inp');if(si&&!S.splitTime)si.value=d;
+      const tot=document.getElementById('fsTotalDur');
+      if(tot)tot.textContent=totalDur(S.drills.fs||[])+' min';
+    } else if(!isPostarget(tid)){
+      // On a group tab: immediately update the rotation-from banner
+      const rfTime=document.querySelector('.tc-rot-from-time');
+      if(rfTime){const rs=rotationStart();if(rs!=null)rfTime.textContent=fmtTime(rs);}
+    }
     // Debounced: cascade auto start times once typing pauses (surgical text-node update, no re-render)
     clearTimeout(_durDebounce);
     _durDebounce=setTimeout(()=>cascadeStartTimes(tid),320);
@@ -1955,12 +1966,7 @@ function cascadeStartTimes(tid){
     const tn=[...timeEl.childNodes].find(n=>n.nodeType===3);
     if(tn)tn.nodeValue=autoT;
   }
-  // Update derived time displays
-  if(tid==='fs'&&!S.splitTime){
-    const d=splitTimeDisplay();
-    const st=document.querySelector('.tc-split-time');if(st)st.textContent=d;
-    const si=document.querySelector('.tc-split-inp');if(si)si.value=d;
-  }
+  // Update derived time displays (group rot-from banner; split footer already handled immediately)
   if(!isPostarget(tid)&&tid!=='fs'){
     const rfTime=document.querySelector('.tc-rot-from-time');
     if(rfTime){const rs=rotationStart();rfTime.textContent=rs!=null?fmtTime(rs):'—';}
@@ -2223,6 +2229,8 @@ async function tryReadOnlyMode(){
     const date=hash.slice(6);
     document.getElementById('app').style.display='none';
     document.getElementById('readOnlyView').style.display='block';
+    document.body.style.overflow='auto';
+    document.body.style.height='auto';
     document.getElementById('readOnlyView').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:14px;color:var(--text-2)"><span class="logo-badge" style="font-size:14px;padding:5px 12px">NT</span><span style="font-size:14px">Loading session…</span></div>';
     if(!NT_FIREBASE_URL){document.getElementById('readOnlyView').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:12px;color:var(--text-2);text-align:center;padding:20px"><span class="logo-badge" style="font-size:14px;padding:5px 12px">NT</span><span style="font-size:15px;color:var(--text)">App not configured</span><span>Ask the admin to republish the app.</span></div>';return true;}
     try{
@@ -2235,7 +2243,9 @@ async function tryReadOnlyMode(){
     return true;
   }
   if(hash.startsWith('#s=')){
-    try{const data=JSON.parse(LZString.decompressFromEncodedURIComponent(hash.slice(3)));document.getElementById('app').style.display='none';document.getElementById('readOnlyView').style.display='block';document.getElementById('readOnlyView').innerHTML='<div class="ro-wrap" id="roWrap"></div>';renderReadOnly(data);return true;}catch(e){return false;}
+    try{const data=JSON.parse(LZString.decompressFromEncodedURIComponent(hash.slice(3)));document.getElementById('app').style.display='none';document.getElementById('readOnlyView').style.display='block';
+    document.body.style.overflow='auto';
+    document.body.style.height='auto';document.getElementById('readOnlyView').innerHTML='<div class="ro-wrap" id="roWrap"></div>';renderReadOnly(data);return true;}catch(e){return false;}
   }
   return false;
 }
