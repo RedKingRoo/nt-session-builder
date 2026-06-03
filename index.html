@@ -2130,7 +2130,24 @@ function captureInputs(){
 }
 function saveSession(){captureInputs();localStorage.setItem('nt_v1',JSON.stringify(S));toast('Session saved ✓','ok');}
 function loadFromStorage(){
-  try{const raw=localStorage.getItem('nt_v1');if(raw){const sv=JSON.parse(raw);if(NT_FIREBASE_URL&&!sv.firebaseUrl)sv.firebaseUrl=NT_FIREBASE_URL;Object.assign(S,sv);if(!S.drills)S.drills={};if(!S.drills.fs)S.drills.fs=[];if(S.splitTime===undefined)S.splitTime='';}}catch(e){}
+  try{
+    const raw=localStorage.getItem('nt_v1');
+    if(raw){
+      const sv=JSON.parse(raw);
+      if(NT_FIREBASE_URL&&!sv.firebaseUrl)sv.firebaseUrl=NT_FIREBASE_URL;
+      Object.assign(S,sv);
+      if(!S.drills)S.drills={};
+      if(!S.drills.fs)S.drills.fs=[];
+      if(S.splitTime===undefined)S.splitTime='';
+      // Migration: remove legacy default "Group A" if it was never used
+      if(S.groups&&S.groups.length===1&&S.groups[0].name==='Group A'
+         &&!(S.drills[S.groups[0].id]&&S.drills[S.groups[0].id].length)
+         &&!S.groups[0].players){
+        delete S.drills[S.groups[0].id];
+        S.groups=[];
+      }
+    }
+  }catch(e){}
 }
 
 // ── SESSIONS MODAL ─────────────────────────────────────────────
