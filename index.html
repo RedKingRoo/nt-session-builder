@@ -1531,8 +1531,8 @@ function renderGroupsSidebar(){
       <div class="group-item-hd">
         <div class="group-dot-btn" style="background:${hex}" onclick="cycleGroupColor('${g.id}')"></div>
         <input class="group-name-inp" type="text" value="${escAttr(g.name)}" placeholder="Group name…" oninput="updateGroupName('${g.id}',this.value)">
-        ${S.groups.length>1?`<button class="btn-icon" title="Merge" style="font-size:11px;color:var(--text-3)" onclick="toggleMerge('${g.id}')">&#8862;</button>`:''}
-        ${S.groups.length>1?`<button class="btn-icon" style="color:var(--text-3)" title="Remove" onclick="removeGroup('${g.id}')">&#10005;</button>`:''}
+        <button class="btn-icon" title="Merge" style="font-size:11px;color:var(--text-3)" onclick="toggleMerge('${g.id}')">&#8862;</button>
+        <button class="btn-icon" style="color:var(--text-3)" title="Remove" onclick="removeGroup('${g.id}')">&#10005;</button>
       </div>
       <textarea class="group-players-inp" placeholder="Player names…" oninput="updateGroupPlayers('${g.id}',this.value)">${escHtml(g.players||'')}</textarea>
       ${showMerge&&others.length?`<div class="group-merge-row">
