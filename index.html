@@ -215,7 +215,7 @@ a{color:var(--royal)}
   color:var(--grey);white-space:nowrap
 }
 .presess-row input{height:28px;flex:1}
-#preSessionNotes,#warmupNotes,#sessionNotes{
+#preSessionNotes,#sessionNotes{
   width:100%;font-size:12.5px;min-height:52px;line-height:1.5
 }
 
@@ -516,6 +516,21 @@ a{color:var(--royal)}
 }
 .tc-empty-sub{font-size:13px;color:var(--text-3);line-height:1.6;font-style:italic}
 
+/* Warmup tag toggle on drill cards */
+.dc-warmup-btn{
+  display:inline-flex;align-items:center;gap:3px;
+  font-family:'Barlow Condensed',sans-serif;font-size:9px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  padding:2px 7px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--border);color:var(--text-3);
+  background:none;transition:all .15s;flex-shrink:0
+}
+.dc-warmup-btn:hover{border-color:var(--amber);color:var(--amber)}
+.dc-warmup-btn.active{
+  background:var(--amber-bg);color:var(--amber);
+  border-color:var(--amber-bdr)
+}
+.drill-card.is-warmup{border-left-color:var(--amber) !important}
 /* ── DRILL CARDS ───────────────────────────────────────────── */
 .drill-card{
   background:var(--bg-card);
@@ -1163,32 +1178,7 @@ body{background:white;color:#111;overflow:auto;font-size:12px}
       <textarea id="preSessionNotes" placeholder="Coach meeting agenda, lineup discussion&hellip;"></textarea>
     </div>
   </div>
-  <div class="card">
-    <div class="card-hd"><span class="card-title">Warmup</span></div>
-    <div class="card-bd">
-      <div class="warmup-dur-row">
-        <label>Duration:</label>
-        <input type="number" id="warmupDuration" value="20" min="5" max="60" style="width:50px;text-align:center">
-        <span>min</span>
-      </div>
-      <textarea id="warmupNotes" placeholder="Dynamic stretch, throwing warmup&hellip;"></textarea>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-hd"><span class="card-title">Session Notes</span></div>
-    <div class="card-bd"><textarea id="sessionNotes" placeholder="General reminders, weather notes&hellip;"></textarea></div>
-  </div>
-  <div class="card">
-    <div class="card-hd"><span class="card-title">Session Length</span></div>
-    <div class="card-bd">
-      <div class="warmup-dur-row">
-        <label>Total length:</label>
-        <input type="number" id="sessionLength" value="180" min="30" max="480" style="width:58px;text-align:center">
-        <span>min</span>
-      </div>
-      <div style="font-size:11px;color:var(--text-3);margin-top:2px" id="sessionEndTime"></div>
-    </div>
-  </div>
+  
 </div><!-- /sbPanel-session -->
 
 <!-- SETTINGS PANEL -->
@@ -1310,7 +1300,7 @@ body{background:white;color:#111;overflow:auto;font-size:12px}
 <script>
 'use strict';
 const NT_FIREBASE_URL='';
-const APP_BASE_URL='';
+const APP_BASE_URL='https://redkingroo.github.io/nt-session-builder/';
 const GROUP_COLORS=['blue','green','amber','purple','red','teal','pri','pink'];
 const GROUP_COLOR_HEX={blue:'#2464B0',green:'#166534',amber:'#92400e',purple:'#5b21b6',red:'#D94010',teal:'#0e7490',pri:'#3A8CD4',pink:'#9d174d'};
 const BUILTIN=[
@@ -1381,14 +1371,14 @@ let S={
   closing:{notes:''},
   absentPlayers:'',
   sessionLength:180,
-  warmupDur:20,warmupNotes:'',sessionNotes:'',
+  sessionNotes:'',
   posSplits:{enabled:false,positions:[
     {id:'ps_pit',name:'Pitchers',color:'red',drills:[]},
     {id:'ps_of',name:'Outfielders',color:'blue',drills:[]},
     {id:'ps_cif',name:'Catchers/Infielders',color:'purple',drills:[]}
   ]},
-  groups:[{id:'g1',name:'Group A',color:'blue',players:''}],
-  drills:{'fs':[],'g1':[]},
+  groups:[],
+  drills:{'fs':[]},
   splitTime:'',
   custom:[...CUSTOM_DRILLS],overrides:{...VIDEO_OVERRIDES},
   firebaseUrl:NT_FIREBASE_URL,_uid:1
@@ -1460,7 +1450,7 @@ function openVideoModalDirect(d){
 // ── TIME ───────────────────────────────────────────────────────
 function parseMin(str){if(!str)return null;const[h,m]=str.split(':').map(Number);return h*60+m;}
 function fmtTime(m){return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
-function mainStart(){const s=parseMin(S.startTime);return s==null?null:s+(parseInt(S.warmupDur)||20);}
+function mainStart(){return parseMin(S.startTime);}
 function sessionAvail(){const ms=mainStart();if(ms==null)return parseInt(S.sessionLength)||180;const start=parseMin(S.startTime)||0;return start+(parseInt(S.sessionLength)||180)-ms;}
 function updateSessionEndTime(){const start=parseMin(S.startTime),len=parseInt(S.sessionLength)||180,el=document.getElementById('sessionEndTime');if(!el)return;if(start!=null){el.textContent='Ends ~'+fmtTime(start+len);}else{el.textContent='';} }
 function totalDur(arr){return arr.reduce((t,d)=>t+(parseInt(d.dur)||20),0);}
@@ -1490,8 +1480,6 @@ function syncControls(){
   document.getElementById('sessionTitle').textContent=S.title;
   document.getElementById('sessionDate').value=S.date;
   document.getElementById('sessionStart').value=S.startTime;
-  document.getElementById('warmupDuration').value=S.warmupDur;
-  document.getElementById('warmupNotes').value=S.warmupNotes;
   document.getElementById('sessionNotes').value=S.sessionNotes;
   const slEl=document.getElementById('sessionLength');if(slEl)slEl.value=S.sessionLength||180;
   updateSessionEndTime();
@@ -1515,7 +1503,12 @@ function updateLocLink(){
 
 // ── GROUPS SIDEBAR ─────────────────────────────────────────────
 function renderGroupsSidebar(){
-  document.getElementById('groupsList').innerHTML=S.groups.map(g=>{
+  const el=document.getElementById('groupsList');
+  if(!S.groups.length){
+    el.innerHTML=`<div style="text-align:center;padding:12px 6px;font-size:12px;font-style:italic;color:var(--text-3)">No groups yet.<br>Add groups when you need a rotation.</div>`;
+    return;
+  }
+  el.innerHTML=S.groups.map(g=>{
     const hex=GROUP_COLOR_HEX[g.color]||'#2464B0';
     const showMerge=_mergeSource===g.id;
     const others=S.groups.filter(x=>x.id!==g.id);
@@ -1548,7 +1541,6 @@ function addGroup(){
   setTimeout(()=>{const items=document.querySelectorAll('.group-item');const last=items[items.length-1];if(last)last.querySelector('.group-name-inp').focus();},50);
 }
 function removeGroup(id){
-  if(S.groups.length<=1){toast('Need at least one group','err');return;}
   if(!confirm('Remove this group and all its drills?'))return;
   S.groups=S.groups.filter(g=>g.id!==id);delete S.drills[id];
   if(activeTab===id)activeTab=S.groups[0].id;
@@ -1617,10 +1609,10 @@ function renderTabBar(){
     ${fsCnt?`<span class="tab-count">${fsCnt}</span>`:''}
   </button>`;
 
-  // Separator before rotation groups
-  html+=`<span class="tab-rot-sep">Rotation</span>`;
-
-  html+=S.groups.map(g=>{
+  // Separator + group tabs — only when groups exist
+  if(S.groups.length){
+    html+=`<span class="tab-rot-sep">Rotation</span>`;
+    html+=S.groups.map(g=>{
     const hex=GROUP_COLOR_HEX[g.color]||'#2464B0';
     const cnt=(S.drills[g.id]||[]).length;
     const active=activeTab===g.id?'active':'';
@@ -1629,6 +1621,7 @@ function renderTabBar(){
       ${cnt?`<span class="tab-count">${cnt}</span>`:''}
     </button>`;
   }).join('');
+  } // end if(S.groups.length)
 
   if(S.posSplits&&S.posSplits.enabled){
     html+='<span class="tab-sep">Positions</span>';
@@ -1751,6 +1744,18 @@ function renderTimeline(){
   if(leftEl){leftEl.textContent=over?(used-avail)+' min over ⚠':(avail-used)+' min left';leftEl.classList.toggle('over',over);}
 }
 
+function toggleWarmup(tid,u){
+  const arr=getDrillsArray(tid);if(!arr)return;
+  const sd=arr.find(x=>x.uid===u);if(!sd)return;
+  sd.warmup=!sd.warmup;
+  const card=document.querySelector(`.drill-card[data-uid="${u}"]`);
+  if(card){
+    card.classList.toggle('is-warmup',sd.warmup);
+    const btn=card.querySelector('.dc-warmup-btn');
+    if(btn){btn.classList.toggle('active',sd.warmup);btn.textContent=sd.warmup?'★ Warmup':'☆ Warmup';}
+  }
+}
+
 // ── DRILL LIST RENDERER ────────────────────────────────────────
 function renderDrillList(tid){
   const arr=getDrillsArray(tid)||[];
@@ -1775,8 +1780,9 @@ function renderDrillList(tid){
     const isManual=!!(sd.start&&sd.start!==autoT);
     running+=(parseInt(sd.dur)||20);  // advance clock for next drill
     const evids=sd.extraVideos||[];
-    return `<div class="drill-card" data-uid="${sd.uid}">
+    return `<div class="drill-card${sd.warmup?' is-warmup':''}" data-uid="${sd.uid}">
       <div class="dc-hd">
+        ${tid==='fs'?`<button class="dc-warmup-btn no-print${sd.warmup?' active':''}" onclick="toggleWarmup('${tid}','${sd.uid}')">${sd.warmup?'★ Warmup':'☆ Warmup'}</button>`:''}
         <div class="dc-time${isManual?' manual':''}" onclick="promptDrillTime('${tid}','${sd.uid}')" title="${isManual?'Manually set — click to change':'Auto-calculated — click to override'}">
           ${escHtml(dispTime)}
           ${isManual?`<span class="dc-time-reset" onclick="event.stopPropagation();clearDrillTime('${tid}','${sd.uid}')">&#8635; auto</span>`:''}
@@ -1882,7 +1888,7 @@ function clearDrillTime(tid,uid_){
 }
 
 // ── DRILL MANAGEMENT ───────────────────────────────────────────
-function makeSd(did,start,dur){return{uid:uid(),did,start:start||'',dur:dur||20,notes:'',focus:'',extraVideos:[]};}
+function makeSd(did,start,dur){return{uid:uid(),did,start:start||'',dur:dur||20,notes:'',focus:'',warmup:false,extraVideos:[]};}
 function addDrillToTarget(tid,drillId){
   const arr=getDrillsArray(tid);if(!arr)return;
   arr.push(makeSd(drillId,'',20));
@@ -2094,8 +2100,6 @@ function captureInputs(){
   S.title=document.getElementById('sessionTitle').textContent.trim();
   S.date=document.getElementById('sessionDate').value;
   S.startTime=document.getElementById('sessionStart').value;
-  S.warmupDur=parseInt(document.getElementById('warmupDuration').value)||20;
-  S.warmupNotes=document.getElementById('warmupNotes').value;
   S.sessionNotes=document.getElementById('sessionNotes').value;
   S.location=document.getElementById('locationName').value.trim();
   S.locationMapsUrl=document.getElementById('locationMapsUrl').value.trim();
@@ -2142,7 +2146,7 @@ async function fbPollForChanges(){if(!S.firebaseUrl||!_loadedSessionKey)return;t
 function fbStartPolling(){if(_fbPollTimer)clearInterval(_fbPollTimer);if(!S.firebaseUrl)return;_fbPollTimer=setInterval(fbPollForChanges,30000);window.addEventListener('focus',fbPollForChanges,{once:false});}
 
 // ── PUBLISH + SHARE ────────────────────────────────────────────
-function sessionPayload(){captureInputs();return{title:S.title,date:S.date,startTime:S.startTime,sessionLength:S.sessionLength||180,splitTime:S.splitTime||'',location:S.location,locationMapsUrl:S.locationMapsUrl,preSession:S.preSession,absentPlayers:S.absentPlayers,warmupDur:S.warmupDur,warmupNotes:S.warmupNotes,sessionNotes:S.sessionNotes,fullSquadDrills:S.drills.fs||[],posSplits:S.posSplits,groups:S.groups,drills:S.drills,custom:S.custom,overrides:S.overrides,firebaseUrl:S.firebaseUrl};}
+function sessionPayload(){captureInputs();return{title:S.title,date:S.date,startTime:S.startTime,sessionLength:S.sessionLength||180,splitTime:S.splitTime||'',location:S.location,locationMapsUrl:S.locationMapsUrl,preSession:S.preSession,absentPlayers:S.absentPlayers,sessionNotes:S.sessionNotes,fullSquadDrills:S.drills.fs||[],posSplits:S.posSplits,groups:S.groups,drills:S.drills,custom:S.custom,overrides:S.overrides,firebaseUrl:S.firebaseUrl};}
 async function publishSession(){
   captureInputs();
   if(!S.firebaseUrl){toast('Set a Firebase URL first','err');return;}
@@ -2172,7 +2176,7 @@ function downloadApp(){
   html=html.replace(/const CUSTOM_DRILLS=\[\];/,'const CUSTOM_DRILLS='+JSON.stringify(S.custom,null,2)+';')
            .replace(/const VIDEO_OVERRIDES=\{\};/,'const VIDEO_OVERRIDES='+JSON.stringify(S.overrides,null,2)+';')
            .replace(/const NT_FIREBASE_URL='';/,"const NT_FIREBASE_URL='"+S.firebaseUrl.replace(/'/g,"\\'")+"';")
-           .replace(/const APP_BASE_URL='';/,"const APP_BASE_URL='"+(APP_BASE_URL||'').replace(/'/g,"\\'")+"';");
+           .replace(/const APP_BASE_URL='https://redkingroo.github.io/nt-session-builder/';/,"const APP_BASE_URL='"+(APP_BASE_URL||'').replace(/'/g,"\\'")+"';");
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='NT_Session_Builder_V1.html';a.click();
   toast('Updated app downloaded ✓','ok');
 }
@@ -2209,7 +2213,7 @@ function renderReadOnly(data){
   const groups=data.groups||[{id:'g1',name:'Group A',color:'blue',players:''}];
   const drills=data.drills||{},ps=data.posSplits;
   const fsDrills=data.fullSquadDrills||(drills.fs)||[];
-  const ms=(()=>{const s=parseMin(data.startTime);return s==null?null:s+(parseInt(data.warmupDur)||20);})();
+  const ms=parseMin(data.startTime);
   // Compute rotation start: manual splitTime, or auto end of full squad
   const splitT=(()=>{if(data.splitTime)return data.splitTime;if(ms==null)return null;const e=ms+totalDur(fsDrills);return e!=ms?fmtTime(e):null;})();
   const rotMs=splitT?parseMin(splitT):ms;
@@ -2226,7 +2230,7 @@ function renderReadOnly(data){
     evids.forEach((v,vi)=>vlinks.push(`<a href="javascript:void(0)" class="ro-video-link ro-ref-link" onclick="roOpenVideo('${escAttr(v)}','${escAttr(d.name)}')">&#9654; Ref ${vi+1}</a>`));
     return `<div class="ro-drill">
       <div class="ro-drill-top"><span class="ro-drill-time">${dispTime}</span><span class="ro-drill-name">${escHtml(d.name)}</span><span class="ro-drill-dur">${sd.dur||20} min</span></div>
-      <div class="ro-drill-meta"><span class="cat-badge cat-${d.cat}">${d.cat}</span>${vlinks.filter(Boolean).join('')}</div>
+      <div class="ro-drill-meta">${sd.warmup?`<span class="cat-badge" style="background:var(--amber-bg);color:var(--amber)">★ Warmup</span>`:''}<span class="cat-badge cat-${d.cat}">${d.cat}</span>${vlinks.filter(Boolean).join('')}</div>
       ${sd.focus?`<div class="ro-drill-focus">${escHtml(sd.focus)}</div>`:''}
     </div>`;
   }
@@ -2243,7 +2247,6 @@ function renderReadOnly(data){
       </div>
     </div>
     ${(data.preSession&&(data.preSession.time||data.preSession.notes))?`<div class="ro-section"><div class="ro-section-title">Pre-Session</div><div class="ro-block">${data.preSession.time?`<div class="ro-block-label">Coach Meeting &mdash; ${data.preSession.time}</div>`:''}${data.preSession.notes?`<div class="ro-block-text">${escHtml(data.preSession.notes)}</div>`:''}</div></div>`:''}
-    ${(data.warmupDur||data.warmupNotes)?`<div class="ro-section"><div class="ro-section-title">Warmup</div><div class="ro-block"><div class="ro-warmup-dur">&#9201; ${data.warmupDur||20} minutes</div>${data.warmupNotes?`<div class="ro-block-text">${escHtml(data.warmupNotes)}</div>`:''}</div></div>`:''}
     ${(ps&&ps.enabled&&ps.positions&&ps.positions.some(p=>(p.drills||[]).length>0))?`<div class="ro-section"><div class="ro-section-title">Position Work</div><div class="ro-groups">${ps.positions.filter(pos=>(pos.drills||[]).length>0).map(pos=>{const hex=GROUP_COLOR_HEX[pos.color]||'#2464B0';return `<div class="ro-group gc-${pos.color}" style="--gc:${hex}"><div class="ro-group-hd"><div class="ro-group-dot"></div><span class="ro-group-name">${escHtml(pos.name)}</span></div>${pos.drills.map((sd,i)=>roCard(sd,i,pos.drills,ms)).join('')}</div>`;}).join('')}</div></div>`:'' }
     ${(fsDrills&&fsDrills.length)?`<div class="ro-section">
       <div class="ro-section-title">Full Squad</div>
@@ -2284,9 +2287,7 @@ setInterval(tick,1000);tick();
 // ── EVENTS ─────────────────────────────────────────────────────
 document.getElementById('sessionDate').addEventListener('change',e=>{S.date=e.target.value;});
 document.getElementById('sessionStart').addEventListener('change',e=>{S.startTime=e.target.value;updateSessionEndTime();if(!isPostarget(activeTab))rerenderDrillList(activeTab);});
-document.getElementById('warmupDuration').addEventListener('input',e=>{S.warmupDur=parseInt(e.target.value)||20;updateSessionEndTime();if(!isPostarget(activeTab))rerenderDrillList(activeTab);});
 document.getElementById('sessionLength') && document.getElementById('sessionLength').addEventListener('input',e=>{S.sessionLength=parseInt(e.target.value)||180;updateSessionEndTime();renderTimeline();});
-document.getElementById('warmupNotes').addEventListener('input',e=>{S.warmupNotes=e.target.value;});
 document.getElementById('sessionNotes').addEventListener('input',e=>{S.sessionNotes=e.target.value;});
 document.getElementById('sessionTitle').addEventListener('input',e=>{S.title=e.target.textContent;});
 document.getElementById('rbSlotDur').addEventListener('input',renderRbPreview);
