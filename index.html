@@ -1215,7 +1215,7 @@ body{background:white;color:#111;overflow:auto;font-size:12px}
     </div>
     <div class="firebase-card-bd">
       <input type="url" id="firebaseUrl" placeholder="https://your-project.firebaseio.com" oninput="S.firebaseUrl=(this.value||'').trim().replace(/\/$/,'');fbStatusUpdate()">
-      <div class="fb-setup-hint" id="fbHint" style="display:none">Visit <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a> &#8594; New project &#8594; Realtime Database &#8594; copy URL.<br><br>Rules:<code style="display:block;margin-top:4px;font-size:10px;color:var(--text-2);white-space:pre-wrap">{"rules":{"nt":{"sessions":{"$date":{".read":true,".write":true}}}}}</code></div>
+      <div class="fb-setup-hint" id="fbHint" style="display:none">Visit <a href="https://console.firebase.google.com" target="_blank" rel="noopener">console.firebase.google.com</a> &#8594; New project &#8594; Realtime Database &#8594; copy URL.<br><br>Rules:<code style="display:block;margin-top:4px;font-size:10px;color:var(--text-2);white-space:pre-wrap">{"rules":{"nt":{"sessions":{".read":true,".write":true}}}}</code></div>
       <button class="btn btn-ghost" style="width:100%;font-size:11px" onclick="toggleFbHint()">&#9881; Setup guide</button>
     </div>
   </div>
