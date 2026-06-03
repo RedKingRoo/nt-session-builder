@@ -1299,7 +1299,7 @@ body{background:white;color:#111;overflow:auto;font-size:12px}
 
 <script>
 'use strict';
-const NT_FIREBASE_URL='';
+const NT_FIREBASE_URL='https://werewolves-training-plan-default-rtdb.europe-west1.firebasedatabase.app';
 const APP_BASE_URL='https://redkingroo.github.io/nt-session-builder/';
 const GROUP_COLORS=['blue','green','amber','purple','red','teal','pri','pink'];
 const GROUP_COLOR_HEX={blue:'#2464B0',green:'#166534',amber:'#92400e',purple:'#5b21b6',red:'#D94010',teal:'#0e7490',pri:'#3A8CD4',pink:'#9d174d'};
@@ -2175,8 +2175,8 @@ function downloadApp(){
   let html=document.documentElement.outerHTML;
   html=html.replace(/const CUSTOM_DRILLS=\[\];/,'const CUSTOM_DRILLS='+JSON.stringify(S.custom,null,2)+';')
            .replace(/const VIDEO_OVERRIDES=\{\};/,'const VIDEO_OVERRIDES='+JSON.stringify(S.overrides,null,2)+';')
-           .replace(/const NT_FIREBASE_URL='';/,"const NT_FIREBASE_URL='"+S.firebaseUrl.replace(/'/g,"\\'")+"';")
-           .replace(/const APP_BASE_URL='https://redkingroo.github.io/nt-session-builder/';/,"const APP_BASE_URL='"+(APP_BASE_URL||'').replace(/'/g,"\\'")+"';");
+           .replace(/const NT_FIREBASE_URL='[^']*';/,"const NT_FIREBASE_URL='"+S.firebaseUrl.replace(/'/g,"\\'")+"';")
+           .replace(/const APP_BASE_URL='[^']*';/,"const APP_BASE_URL='"+(APP_BASE_URL||'').replace(/'/g,"\\'")+"';");
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='NT_Session_Builder_V1.html';a.click();
   toast('Updated app downloaded ✓','ok');
 }
