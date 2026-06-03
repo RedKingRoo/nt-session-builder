@@ -1732,6 +1732,7 @@ function renderTabContent(){
         <span class="tc-name">${escHtml(g.name)}</span>
         ${players.length?`<span class="tc-players">&#128101; ${players.join(', ')}</span>`:''}
         <button class="btn btn-ghost no-print" style="margin-left:auto;font-size:12px" onclick="openPicker('${g.id}')">&#65291; Add Drill</button>
+        ${arr.some(sd=>sd.start)?`<button class="btn btn-ghost no-print" style="font-size:11px;height:26px;padding:0 8px;border-color:var(--amber-bdr);color:var(--amber)" title="Reset all drill start times to auto-calculate" onclick="clearGroupTimes('${g.id}')">&#8635; Auto times</button>`:''}
       </div>
       <div class="tc-timeline" id="tcTimeline">
         <div class="tc-tl-row">
@@ -1972,6 +1973,13 @@ function cascadeStartTimes(tid){
     if(rfTime){const rs=rotationStart();rfTime.textContent=rs!=null?fmtTime(rs):'—';}
   }
 }
+
+function clearGroupTimes(gid){
+  const arr=getDrillsArray(gid)||[];
+  arr.forEach(sd=>{sd.start='';});
+  rerenderDrillList(gid);
+  toast('Times reset to auto ✓','ok');
+}
 function addExtraVideo(tid,u){
   const url=prompt('Enter video URL (YouTube, Google Drive, Instagram):');
   if(!url||!url.trim())return;
@@ -2075,7 +2083,7 @@ function buildRotation(){
   const startMin=parseMin(startVal),nSt=stations.length;
   S.groups.forEach((g,gi)=>{
     S.drills[g.id]=[];
-    for(let r=0;r<rounds;r++){const did=stations[(gi+r)%nSt];if(!did)continue;S.drills[g.id].push(makeSd(did,fmtTime(startMin+r*dur),dur));}
+    for(let r=0;r<rounds;r++){const did=stations[(gi+r)%nSt];if(!did)continue;S.drills[g.id].push(makeSd(did,'',dur));}
   });
   closeModal('rotationBackdrop');
   renderAll();
