@@ -147,7 +147,7 @@ a{color:var(--royal)}
   color:var(--sky);letter-spacing:.08em;min-width:52px;text-align:center;flex-shrink:0
 }
 .header-actions{display:flex;gap:5px;margin-left:auto}
-.app-body{display:flex;flex:1;overflow:hidden}
+.app-body{display:flex;flex:1;overflow:hidden;min-height:0}
 
 /* ── SIDEBAR ───────────────────────────────────────────────── */
 .sidebar{
@@ -406,7 +406,7 @@ a{color:var(--royal)}
 }
 
 /* ── MAIN AREA & TAB BAR ───────────────────────────────────── */
-.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .tab-bar{
   display:flex;align-items:flex-end;gap:2px;
   padding:8px 14px 0;flex-shrink:0;
@@ -457,7 +457,7 @@ a{color:var(--royal)}
 .tab-add-btn:hover{color:#fff}
 
 /* ── TAB CONTENT ───────────────────────────────────────────── */
-.tab-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-card)}
+.tab-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-card);min-height:0}
 .tc-hd{
   flex-shrink:0;padding:10px 16px;
   border-bottom:1px solid var(--border);background:var(--bg-card);
@@ -491,7 +491,7 @@ a{color:var(--royal)}
 .tc-tl-track{height:4px;background:var(--bg-raised);border-radius:3px;overflow:hidden}
 .tc-tl-fill{height:100%;border-radius:3px;transition:width .4s ease;background:var(--gc,var(--royal))}
 .tc-tl-fill.tc-timeline-over{background:var(--stitch-red) !important}
-.tc-body{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
+.tc-body{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;min-height:0}
 .tc-footer{padding:0 10px 10px;flex-shrink:0}
 .tc-add-btn{
   width:100%;padding:9px 0;display:flex;align-items:center;justify-content:center;gap:6px;
@@ -516,6 +516,16 @@ a{color:var(--royal)}
 }
 .tc-empty-sub{font-size:13px;color:var(--text-3);line-height:1.6;font-style:italic}
 
+/* Drill notes sync button */
+.dc-sync-btn{
+  display:inline-flex;align-items:center;gap:4px;margin-top:6px;
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  padding:3px 10px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--royal);color:var(--royal);
+  background:var(--pri-bg);transition:all .15s
+}
+.dc-sync-btn:hover{background:rgba(36,100,176,.18)}
 /* Warmup tag toggle on drill cards */
 .dc-warmup-btn{
   display:inline-flex;align-items:center;gap:3px;
@@ -1772,6 +1782,26 @@ function toggleWarmup(tid,u){
   }
 }
 
+
+function drillInOtherGroups(tid,did){
+  return S.groups.some(g=>g.id!==tid&&(S.drills[g.id]||[]).some(sd=>sd.did===did));
+}
+function syncDrillNotes(tid,uid){
+  const srcArr=getDrillsArray(tid);if(!srcArr)return;
+  const srcSd=srcArr.find(x=>x.uid===uid);if(!srcSd)return;
+  let count=0;
+  S.groups.forEach(g=>{
+    if(g.id===tid)return;
+    (S.drills[g.id]||[]).forEach(sd=>{
+      if(sd.did===srcSd.did){
+        sd.focus=srcSd.focus;
+        sd.notes=srcSd.notes;
+        count++;
+      }
+    });
+  });
+  toast(count?`Notes synced to ${count} other drill${count!==1?'s':''} ✓`:'No matching drills in other groups','ok');
+}
 // ── DRILL LIST RENDERER ────────────────────────────────────────
 function renderDrillList(tid){
   const arr=getDrillsArray(tid)||[];
@@ -1828,6 +1858,7 @@ function renderDrillList(tid){
         <textarea class="dc-focus" placeholder="Key coaching cues, what players should focus on…" oninput="updateSDInTarget('${tid}','${sd.uid}','focus',this.value)">${escHtml(sd.focus||'')}</textarea>
         <span class="dc-field-lbl notes-lbl no-print">Coach Notes (internal)</span>
         <textarea class="dc-notes no-print" placeholder="Setup notes, equipment, rep schemes…" oninput="updateSDInTarget('${tid}','${sd.uid}','notes',this.value)">${escHtml(sd.notes||'')}</textarea>
+        ${(!isPostarget(tid)&&tid!=='fs'&&drillInOtherGroups(tid,d.id))?`<button class="dc-sync-btn no-print" onclick="syncDrillNotes('${tid}','${sd.uid}')">&#8599; Apply notes to all groups</button>`:''}
         <div class="dc-evids no-print">
           ${evids.map((v,vi)=>`<div class="dc-evid-row">
             <span class="vtype-badge vtype-${videoType(v)||'unknown'}">${videoTypeName(v)||'Link'}</span>
