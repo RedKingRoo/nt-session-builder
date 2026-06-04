@@ -2208,7 +2208,7 @@ async function openSessionsModal(){
 function renderSessionsList(filter){
   if(!_cachedSessions)return;
   const f=(filter||'').toLowerCase();
-  const entries=Object.entries(_cachedSessions).sort((a,b)=>b[0].localeCompare(a[0])).filter(([k,s])=>!f||k.includes(f)||(s.title||'').toLowerCase().includes(f));
+  const entries=Object.entries(_cachedSessions).filter(([k])=>k!=='current').sort((a,b)=>b[0].localeCompare(a[0])).filter(([k,s])=>!f||k.includes(f)||(s.title||'').toLowerCase().includes(f));
   document.getElementById('sessCount').textContent=entries.length+' session'+(entries.length!==1?'s':'');
   if(!entries.length){document.getElementById('sessionsListBody').innerHTML='<div class="sess-empty">No sessions match.</div>';return;}
   document.getElementById('sessionsListBody').innerHTML=entries.map(([key,sess])=>`<div class="sess-item" onclick="loadSession('${escAttr(key)}')"><span class="sess-item-date">${key}</span><span class="sess-item-title">${escHtml(sess.title||'Untitled')}</span><button class="btn-icon" style="flex-shrink:0" onclick="event.stopPropagation();deleteSession('${escAttr(key)}')">🗑</button></div>`).join('');
@@ -2229,11 +2229,19 @@ async function publishSession(){
   if(!S.firebaseUrl){toast('Set a Firebase URL first','err');return;}
   const date=S.date||new Date().toISOString().slice(0,10),payload=sessionPayload();
   const btn=document.querySelector('[onclick="publishSession()"]');if(btn){btn.textContent='Publishing…';btn.disabled=true;}
-  try{const res=await fetch(S.firebaseUrl+'/nt/sessions/'+date+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});if(!res.ok)throw new Error(res.status);_loadedSessionKey=date;_lastPublishedHash=JSON.stringify(payload);toast('Session published ✓','ok');openShareModal();}
+  try{
+    // Always write to fixed 'current' key — keeps the share URL permanent
+    const res=await fetch(S.firebaseUrl+'/nt/sessions/current.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!res.ok)throw new Error(res.status);
+    // Silently archive to date key for session history (fire-and-forget)
+    fetch(S.firebaseUrl+'/nt/sessions/'+date+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+    _loadedSessionKey='current';_lastPublishedHash=JSON.stringify(payload);
+    toast('Session published ✓','ok');openShareModal();
+  }
   catch(e){toast('Publish failed — check Firebase URL and rules','err');}
   finally{if(btn){btn.innerHTML='&#9654; Publish';btn.disabled=false;}}
 }
-function stableShareUrl(){const base=APP_BASE_URL||window.location.href.split('#')[0];return base+'#live='+(S.date||new Date().toISOString().slice(0,10));}
+function stableShareUrl(){const base=APP_BASE_URL||window.location.href.split('#')[0];return base+'#live=current';}
 function legacyShareUrl(){const base=APP_BASE_URL||window.location.href.split('#')[0];return base+'#s='+LZString.compressToEncodedURIComponent(JSON.stringify(sessionPayload()));}
 function openShareModal(){
   captureInputs();
